@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>DustInTheWind.Crypto.Adapters.LogAccess</AssemblyName>
+        <RootNamespace>DustInTheWind.Crypto.Adapters.LogAccess</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Crypto.Ports.LogAccess\Crypto.Ports.LogAccess.csproj" PrivateAssets="All" />
+    </ItemGroup>
+
+</Project>

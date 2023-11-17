@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Crypto": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>DustInTheWind.Crypto.Adapters.FileAccess</AssemblyName>
+        <RootNamespace>DustInTheWind.Crypto.Adapters.FileAccess</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Crypto.Domain\Crypto.Domain.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Ports.FileAccess\Crypto.Ports.FileAccess.csproj" PrivateAssets="All" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto", "Crypto\Crypto.csproj", "{BB1D1689-12A2-4A62-8156-F8735623D4D5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Domain", "Crypto.Domain\Crypto.Domain.csproj", "{58968E07-DF6D-41EF-8C2B-5683DED9FAC8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Ports.LogAccess", "Crypto.Ports.LogAccess\Crypto.Ports.LogAccess.csproj", "{57610638-692C-4917-8DD1-592F1DFF344C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ports", "Ports", "{2CA0306D-3981-415F-98FE-0BBB90928E86}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{529C5682-0A5F-4818-B78A-4AD81F1AF551}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Adapters.LogAccess", "Crypto.Adapters.LogAccess\Crypto.Adapters.LogAccess.csproj", "{23046ECC-2C5E-4D35-9015-F3375DCA39EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Ports.FileAccess", "Crypto.Ports.FileAccess\Crypto.Ports.FileAccess.csproj", "{2C34587D-D7CD-456D-8F21-C3BB97D382D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Adapters.FileAccess", "Crypto.Adapters.FileAccess\Crypto.Adapters.FileAccess.csproj", "{B470937D-EB63-4EA2-A3D6-479851F00975}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Ports.CertificateAccess", "Crypto.Ports.CertificateAccess\Crypto.Ports.CertificateAccess.csproj", "{15D0A47C-957C-40FC-A32E-BD33E119289B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Adapters.CertificateAccess", "Crypto.Adapters.CertificateAccess\Crypto.Adapters.CertificateAccess.csproj", "{46727A47-8D4B-438D-B27A-476F6CE9B77E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crypto.Presentation", "Crypto.Presentation\Crypto.Presentation.csproj", "{4447E993-9E91-4C4B-9914-A5740BF0B944}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB1D1689-12A2-4A62-8156-F8735623D4D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB1D1689-12A2-4A62-8156-F8735623D4D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB1D1689-12A2-4A62-8156-F8735623D4D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB1D1689-12A2-4A62-8156-F8735623D4D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58968E07-DF6D-41EF-8C2B-5683DED9FAC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58968E07-DF6D-41EF-8C2B-5683DED9FAC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58968E07-DF6D-41EF-8C2B-5683DED9FAC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58968E07-DF6D-41EF-8C2B-5683DED9FAC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57610638-692C-4917-8DD1-592F1DFF344C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57610638-692C-4917-8DD1-592F1DFF344C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57610638-692C-4917-8DD1-592F1DFF344C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57610638-692C-4917-8DD1-592F1DFF344C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23046ECC-2C5E-4D35-9015-F3375DCA39EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23046ECC-2C5E-4D35-9015-F3375DCA39EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23046ECC-2C5E-4D35-9015-F3375DCA39EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23046ECC-2C5E-4D35-9015-F3375DCA39EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C34587D-D7CD-456D-8F21-C3BB97D382D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C34587D-D7CD-456D-8F21-C3BB97D382D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C34587D-D7CD-456D-8F21-C3BB97D382D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C34587D-D7CD-456D-8F21-C3BB97D382D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B470937D-EB63-4EA2-A3D6-479851F00975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B470937D-EB63-4EA2-A3D6-479851F00975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B470937D-EB63-4EA2-A3D6-479851F00975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B470937D-EB63-4EA2-A3D6-479851F00975}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15D0A47C-957C-40FC-A32E-BD33E119289B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15D0A47C-957C-40FC-A32E-BD33E119289B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15D0A47C-957C-40FC-A32E-BD33E119289B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15D0A47C-957C-40FC-A32E-BD33E119289B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46727A47-8D4B-438D-B27A-476F6CE9B77E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46727A47-8D4B-438D-B27A-476F6CE9B77E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46727A47-8D4B-438D-B27A-476F6CE9B77E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46727A47-8D4B-438D-B27A-476F6CE9B77E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4447E993-9E91-4C4B-9914-A5740BF0B944}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4447E993-9E91-4C4B-9914-A5740BF0B944}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4447E993-9E91-4C4B-9914-A5740BF0B944}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4447E993-9E91-4C4B-9914-A5740BF0B944}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{57610638-692C-4917-8DD1-592F1DFF344C} = {2CA0306D-3981-415F-98FE-0BBB90928E86}
+		{23046ECC-2C5E-4D35-9015-F3375DCA39EF} = {529C5682-0A5F-4818-B78A-4AD81F1AF551}
+		{2C34587D-D7CD-456D-8F21-C3BB97D382D1} = {2CA0306D-3981-415F-98FE-0BBB90928E86}
+		{B470937D-EB63-4EA2-A3D6-479851F00975} = {529C5682-0A5F-4818-B78A-4AD81F1AF551}
+		{15D0A47C-957C-40FC-A32E-BD33E119289B} = {2CA0306D-3981-415F-98FE-0BBB90928E86}
+		{46727A47-8D4B-438D-B27A-476F6CE9B77E} = {529C5682-0A5F-4818-B78A-4AD81F1AF551}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E56B018C-195C-4D65-B7BB-168693E9F5AC}
+	EndGlobalSection
+EndGlobal

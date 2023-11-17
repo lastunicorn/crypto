@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>DustInTheWind.Crypto.PresentationAndUseCases</AssemblyName>
+        <RootNamespace>DustInTheWind.Crypto.PresentationAndUseCases</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ConsoleTools.Commando" Version="2.0.0-beta.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Crypto.Domain\Crypto.Domain.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Ports.CertificateAccess\Crypto.Ports.CertificateAccess.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Ports.FileAccess\Crypto.Ports.FileAccess.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Ports.LogAccess\Crypto.Ports.LogAccess.csproj" PrivateAssets="All" />
+    </ItemGroup>
+
+</Project>

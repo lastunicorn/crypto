@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>Crypto</AssemblyName>
+        <RootNamespace>DustInTheWind.Crypto</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ConsoleTools.Commando.Setup.Autofac" Version="2.0.0-beta.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Crypto.Adapters.CertificateAccess\Crypto.Adapters.CertificateAccess.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Adapters.FileAccess\Crypto.Adapters.FileAccess.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Adapters.LogAccess\Crypto.Adapters.LogAccess.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Domain\Crypto.Domain.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Ports.CertificateAccess\Crypto.Ports.CertificateAccess.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Ports.FileAccess\Crypto.Ports.FileAccess.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Ports.LogAccess\Crypto.Ports.LogAccess.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Presentation\Crypto.Presentation.csproj" PrivateAssets="All" />
+    </ItemGroup>
+
+</Project>
