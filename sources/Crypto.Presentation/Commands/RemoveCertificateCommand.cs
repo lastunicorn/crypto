@@ -1,10 +1,7 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using DustInTheWind.ConsoleTools.Commando;
-using DustInTheWind.Crypto.Domain.CertificateModel;
-using DustInTheWind.Crypto.Ports.CertificateAccess;
-using DustInTheWind.Crypto.Ports.FileAccess;
-using DustInTheWind.Crypto.Ports.LogAccess;
-using DustInTheWind.Crypto.PresentationAndUseCases.Steps;
+using DustInTheWind.Crypto.Application.RemoveCertificate;
+using MediatR;
 
 namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands;
 
@@ -12,11 +9,9 @@ namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands;
 /// Call Example: crypto remove -n "Dummy Root CA" -L LocalMachine -S Root
 /// </summary>
 [NamedCommand("remove", Description = "Removes the specified certificate from the store.")]
-internal class RemoveCertificateCommand : ICommand
+internal class RemoveCertificateCommand : IConsoleCommand
 {
-    private readonly ILog log;
-    private readonly ICertificateRepository certificateRepository;
-    private readonly IFileSystem fileSystem;
+    private readonly IMediator mediator;
 
     [NamedParameter("store-location", ShortName = 'L', IsOptional = true)]
     public StoreLocation StoreLocation { get; set; } = StoreLocation.CurrentUser;
@@ -27,39 +22,20 @@ internal class RemoveCertificateCommand : ICommand
     [NamedParameter("name", ShortName = 'n')]
     public string Name { get; set; }
 
-    public RemoveCertificateCommand(ILog log, ICertificateRepository certificateRepository, IFileSystem fileSystem)
+    public RemoveCertificateCommand(IMediator mediator)
     {
-        this.log = log ?? throw new ArgumentNullException(nameof(log));
-        this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
-        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public Task Execute()
+    public async Task Execute()
     {
-        FindCertificateStep findCertificateStep = new(log, certificateRepository)
+        RemoveCertificateRequest request = new()
         {
-            CertificateIdentifier = new CertificateIdentifier
-            {
-                Name = Name,
-                StoreLocation = StoreLocation,
-                StoreName = StoreName
-            }
+            StoreLocation = StoreLocation,
+            StoreName = StoreName,
+            Name = Name
         };
 
-        findCertificateStep.Execute();
-
-        if (findCertificateStep.FoundCertificates is { Count: not 0 })
-        {
-            RemoveCertificateFromStoreStep removeCertificateFromStoreStep = new(log, certificateRepository)
-            {
-                Certificates = findCertificateStep.FoundCertificates
-            };
-
-            removeCertificateFromStoreStep.Execute();
-
-            return Task.CompletedTask;
-        }
-
-        return Task.CompletedTask;
+        await mediator.Send(request);
     }
 }

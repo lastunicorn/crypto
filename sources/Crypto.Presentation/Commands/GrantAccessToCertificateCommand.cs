@@ -1,54 +1,38 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using DustInTheWind.ConsoleTools.Commando;
-using DustInTheWind.Crypto.Domain.CertificateModel;
-using DustInTheWind.Crypto.Ports.CertificateAccess;
-using DustInTheWind.Crypto.Ports.LogAccess;
-using DustInTheWind.Crypto.PresentationAndUseCases.Steps;
+using DustInTheWind.Crypto.Application.GrantAccessToCertificate;
+using MediatR;
 
 namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands;
 
 [NamedCommand("grant-access", Description = "Give read permissions to everyone for accessing the specified certificate.")]
-internal class GrantAccessToCertificateCommand : ICommand
+internal class GrantAccessToCertificateCommand : IConsoleCommand
 {
-    private readonly ILog log;
-    private readonly ICertificateRepository certificateRepository;
+    private readonly IMediator mediator;
 
     [NamedParameter("store-location", ShortName = 'L', IsOptional = true)]
-    public StoreLocation StoreLocation { get; set; } = StoreLocation.CurrentUser;
+    public StoreLocation StoreLocation { get; set; }
 
     [NamedParameter("store-name", ShortName = 'S', IsOptional = true)]
-    public StoreName StoreName { get; set; } = StoreName.My;
+    public StoreName StoreName { get; set; }
 
     [NamedParameter("subject-name", ShortName = 's')]
     public string SubjectName { get; set; }
 
-    public GrantAccessToCertificateCommand(ILog log, ICertificateRepository certificateRepository)
+    public GrantAccessToCertificateCommand(IMediator mediator)
     {
-        this.log = log ?? throw new ArgumentNullException(nameof(log));
-        this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public Task Execute()
+    public async Task Execute()
     {
-        FindCertificateStep findCertificateStep = new(log, certificateRepository)
+        GrantAccessToCertificateRequest request = new()
         {
-            CertificateIdentifier = new CertificateIdentifier
-            {
-                Name = SubjectName,
-                StoreLocation = StoreLocation,
-                StoreName = StoreName
-            }
+            StoreLocation = StoreLocation,
+            StoreName = StoreName,
+            SubjectName = SubjectName
         };
 
-        findCertificateStep.Execute();
-
-        GrantReadAccessToCertificateStep grantReadAccessToCertificateStep = new(log)
-        {
-            Certificate = findCertificateStep.FoundCertificates?.FirstOrDefault()
-        };
-
-        grantReadAccessToCertificateStep.Execute();
-
-        return Task.CompletedTask;
+        await mediator.Send(request);
     }
 }

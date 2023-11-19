@@ -8,9 +8,9 @@ internal class Program
 {
     public static async Task Main(string[] args)
     {
-        Application application = ApplicationBuilder.Create()
-            .RegisterCommandsFrom(typeof(HashCommand).Assembly)
+        ConsoleTools.Commando.Application application = ApplicationBuilder.Create()
             .ConfigureServices(ServiceConfiguration.Configure)
+            .RegisterCommandsFrom(typeof(HashCommand).Assembly)
             .Build();
 
         ConfigureDefaults();

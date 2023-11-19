@@ -1,75 +1,38 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using DustInTheWind.ConsoleTools.Commando;
-using DustInTheWind.Crypto.Domain.CertificateModel;
-using DustInTheWind.Crypto.Ports.CertificateAccess;
-using DustInTheWind.Crypto.Ports.FileAccess;
-using DustInTheWind.Crypto.Ports.LogAccess;
-using DustInTheWind.Crypto.PresentationAndUseCases.Steps;
+using DustInTheWind.Crypto.Application.ExportAsPfx;
+using MediatR;
 
 namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands;
 
 [NamedCommand("export-pfx", Description = "Exports a specific certificate from the store as a pfx file.")]
-internal class ExportAsPfxCommand : ICommand
+internal class ExportAsPfxCommand : IConsoleCommand
 {
-    private readonly IFileSystem fileSystem;
-    private readonly ILog log;
-    private readonly ICertificateRepository certificateRepository;
+    private readonly IMediator mediator;
 
     [NamedParameter("store-location", ShortName = 'L', IsOptional = true)]
-    public StoreLocation StoreLocation { get; set; } = StoreLocation.CurrentUser;
+    public StoreLocation StoreLocation { get; set; }
 
     [NamedParameter("store-name", ShortName = 'S', IsOptional = true)]
-    public StoreName StoreName { get; set; } = StoreName.My;
+    public StoreName StoreName { get; set; }
 
     [NamedParameter("subject-name", ShortName = 's')]
     public string SubjectName { get; set; }
 
-    public ExportAsPfxCommand(IFileSystem fileSystem, ILog log, ICertificateRepository certificateRepository)
+    public ExportAsPfxCommand(IMediator mediator)
     {
-        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        this.log = log ?? throw new ArgumentNullException(nameof(log));
-        this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public Task Execute()
+    public async Task Execute()
     {
-        IEnumerable<GenericCertificate> certificates = RetrieveCertificates();
-
-        int index = 0;
-
-        foreach (GenericCertificate genericCertificate in certificates)
+        ExportAsPfxRequest request = new()
         {
-            ExportCertificate(genericCertificate, index);
-            index++;
-        }
-
-        return Task.CompletedTask;
-    }
-
-    private IEnumerable<GenericCertificate> RetrieveCertificates()
-    {
-        FindCertificateStep findCertificateStep = new(log, certificateRepository)
-        {
-            CertificateIdentifier = new CertificateIdentifier
-            {
-                Name = SubjectName,
-                StoreLocation = StoreLocation,
-                StoreName = StoreName
-            }
+            StoreLocation = StoreLocation,
+            StoreName = StoreName,
+            SubjectName = SubjectName
         };
 
-        findCertificateStep.Execute();
-
-        return findCertificateStep.FoundCertificates;
-    }
-
-    private void ExportCertificate(GenericCertificate certificate, int index)
-    {
-        SaveCertificateAsPfxStep saveCertificateAsPemStep = new(log, fileSystem)
-        {
-            Certificate = certificate,
-            FileName = $"certificate-{index:00}.pfx"
-        };
-        saveCertificateAsPemStep.Execute();
+        await mediator.Send(request);
     }
 }

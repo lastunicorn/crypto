@@ -1,92 +1,34 @@
 ﻿using DustInTheWind.ConsoleTools.Commando;
-using DustInTheWind.Crypto.Ports.LogAccess;
-using DustInTheWind.Crypto.PresentationAndUseCases.Steps;
+using DustInTheWind.Crypto.Application;
+using DustInTheWind.Crypto.Application.Hash;
+using MediatR;
 
 namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands;
 
 [NamedCommand("hash", Description = "Encrypts the provided text using hashing algorithms: MD5, SHA1, SHA256, SHA384, SHA512.")]
-public class HashCommand : ICommand
+public class HashCommand : IConsoleCommand
 {
-    private readonly ILog log;
+    private readonly IMediator mediator;
 
     [NamedParameter("text", ShortName = 't', IsOptional = true)]
-    public string Text { get; set; } = "Here is some data to encrypt!";
+    public string Text { get; set; }
 
     [NamedParameter("algorithm", ShortName = 'a', IsOptional = true)]
-    public HashAlgorithmEnum Algorithm { get; set; } = HashAlgorithmEnum.All;
+    public HashAlgorithmEnum Algorithm { get; set; }
 
-    public HashCommand(ILog log)
+    public HashCommand(IMediator mediator)
     {
-        this.log = log;
+        this.mediator = mediator;
     }
 
-    public Task Execute()
+    public async Task Execute()
     {
-        if (Algorithm is HashAlgorithmEnum.All or HashAlgorithmEnum.Md5)
-            EncryptWithMd5(Text);
-
-        if (Algorithm is HashAlgorithmEnum.All or HashAlgorithmEnum.Sha1)
-            EncryptWithSha1(Text);
-
-        if (Algorithm is HashAlgorithmEnum.All or HashAlgorithmEnum.Sha256)
-            EncryptWithSha256(Text);
-
-        if (Algorithm is HashAlgorithmEnum.All or HashAlgorithmEnum.Sha384)
-            EncryptWithSha384(Text);
-
-        if (Algorithm is HashAlgorithmEnum.All or HashAlgorithmEnum.Sha512)
-            EncryptWithSha512(Text);
-
-        return Task.CompletedTask;
-    }
-
-    private void EncryptWithMd5(string textToEncrypt)
-    {
-        Md5EncryptStep md5EncryptStep = new(log)
+        HashRequest request = new()
         {
-            Message = textToEncrypt
+            Text = Text,
+            Algorithm = Algorithm
         };
 
-        md5EncryptStep.Execute();
-    }
-
-    private void EncryptWithSha1(string textToEncrypt)
-    {
-        Sha1EncryptStep sha1EncryptStep = new(log)
-        {
-            Message = textToEncrypt
-        };
-
-        sha1EncryptStep.Execute();
-    }
-
-    private void EncryptWithSha256(string textToEncrypt)
-    {
-        Sha256EncryptStep sha256EncryptStep = new(log)
-        {
-            Message = textToEncrypt
-        };
-
-        sha256EncryptStep.Execute();
-    }
-
-    private void EncryptWithSha384(string textToEncrypt)
-    {
-        Sha384EncryptStep sha384EncryptStep = new(log)
-        {
-            Message = textToEncrypt
-        };
-
-        sha384EncryptStep.Execute();
-    }
-
-    private void EncryptWithSha512(string textToEncrypt)
-    {
-        Sha512EncryptStep sha512EncryptStep = new(log)
-        {
-            Message = textToEncrypt
-        };
-
-        sha512EncryptStep.Execute();
+        await mediator.Send(request);
     }
 }

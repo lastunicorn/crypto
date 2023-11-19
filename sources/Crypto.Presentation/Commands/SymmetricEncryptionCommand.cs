@@ -1,114 +1,29 @@
-﻿using System.Security.Cryptography;
-using DustInTheWind.ConsoleTools.Commando;
-using DustInTheWind.Crypto.Ports.LogAccess;
-using DustInTheWind.Crypto.PresentationAndUseCases.Steps;
+﻿using DustInTheWind.ConsoleTools.Commando;
+using DustInTheWind.Crypto.Application.SymmetricEncryption;
+using MediatR;
 
 namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands;
 
 [NamedCommand("encrypt", Description = "Encrypts and decrypts the provided text using symmetric encryption algorithms: AES, DES, TripleDES.")]
-internal class SymmetricEncryptionCommand : ICommand
+internal class SymmetricEncryptionCommand : IConsoleCommand
 {
-    private readonly ILog log;
+    private readonly IMediator mediator;
 
     [NamedParameter("text", ShortName = 't', IsOptional = true)]
-    public string Text { get; set; } = "Here is some data to encrypt!";
+    public string Text { get; set; }
 
-    public SymmetricEncryptionCommand(ILog log)
+    public SymmetricEncryptionCommand(IMediator mediator)
     {
-        this.log = log ?? throw new ArgumentNullException(nameof(log));
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public Task Execute()
+    public async Task Execute()
     {
-        EncryptDecryptWithAes(Text);
-        EncryptDecryptWithDes(Text);
-        EncryptDecryptWithTripleDes(Text);
-
-        return Task.CompletedTask;
-    }
-
-    private void EncryptDecryptWithAes(string textToEncrypt)
-    {
-        using Aes myAes = Aes.Create();
-
-        // ----------------------------------------------------------------------------------------------------
-        // AES Encrypt
-        // ----------------------------------------------------------------------------------------------------
-
-        AesEncryptStep aesEncryptStep = new(log)
+        SymmetricEncryptionRequest request = new()
         {
-            Message = textToEncrypt,
-            Key = myAes.Key,
-            IV = myAes.IV
+            Text = Text
         };
 
-        aesEncryptStep.Execute();
-
-        // ----------------------------------------------------------------------------------------------------
-        // AES Decrypt
-        // ----------------------------------------------------------------------------------------------------
-
-        AesDecryptStep aesDecryptStep = new(log)
-        {
-            EncryptedMessage = aesEncryptStep.EncryptedMessage,
-            Key = myAes.Key,
-            IV = myAes.IV
-        };
-
-        aesDecryptStep.Execute();
-    }
-
-    private void EncryptDecryptWithDes(string textToEncrypt)
-    {
-        using DES myDes = DES.Create();
-
-        // ----------------------------------------------------------------------------------------------------
-        // DES Encrypt
-        // ----------------------------------------------------------------------------------------------------
-
-        DesEncryptStep desEncryptStep = new(log)
-        {
-            Message = textToEncrypt,
-            Key = myDes.Key,
-            IV = myDes.IV
-        };
-
-        desEncryptStep.Execute();
-
-        // ----------------------------------------------------------------------------------------------------
-        // DES Decrypt
-        // ----------------------------------------------------------------------------------------------------
-
-        DesDecryptStep desDecryptStep = new(log)
-        {
-            EncryptedMessage = desEncryptStep.EncryptedMessage,
-            Key = myDes.Key,
-            IV = myDes.IV
-        };
-
-        desDecryptStep.Execute();
-    }
-
-    private void EncryptDecryptWithTripleDes(string textToEncrypt)
-    {
-        using TripleDES myTripleDes = TripleDES.Create();
-
-        TripleDesEncryptStep tripleDesEncryptStep = new(log)
-        {
-            Message = textToEncrypt,
-            Key = myTripleDes.Key,
-            IV = myTripleDes.IV
-        };
-
-        tripleDesEncryptStep.Execute();
-
-        TripleDesDecryptStep tripleDesDecryptStep = new(log)
-        {
-            EncryptedMessage = tripleDesEncryptStep.EncryptedMessage,
-            Key = myTripleDes.Key,
-            IV = myTripleDes.IV
-        };
-
-        tripleDesDecryptStep.Execute();
+        await mediator.Send(request);
     }
 }
