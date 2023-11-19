@@ -1,57 +1,45 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using DustInTheWind.ConsoleTools.Commando;
-using DustInTheWind.Crypto.Application;
-using DustInTheWind.Crypto.Application.AlezArea;
 using DustInTheWind.Crypto.Application.Steps;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
+using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.CommandsOld;
+namespace DustInTheWind.Crypto.Application.AlezArea.ShowAlezCertificates;
 
-[NamedCommand("waters-show", Description = "Displays detailed information for all the waters certificates.")]
-internal class ShowWatersCertificatesCommand : IConsoleCommand
+internal class ShowAlezCertificatesUseCase : IRequestHandler<ShowAlezCertificatesRequest>
 {
     private readonly ILog log;
     private readonly ICertificateRepository certificateRepository;
 
-    [NamedParameter("type", ShortName = 't', IsOptional = true)]
-    public CertificateType CertificateType { get; set; } = CertificateType.All;
-
-    [NamedParameter("filter", ShortName = 'f', IsOptional = true)]
-    public string Filter { get; set; }
-
-    [NamedParameter("details", ShortName = 'd', IsOptional = true)]
-    public CertificateDetailsType Details { get; set; }
-
-    public ShowWatersCertificatesCommand(ILog log, ICertificateRepository certificateRepository)
+    public ShowAlezCertificatesUseCase(ILog log, ICertificateRepository certificateRepository)
     {
         this.log = log ?? throw new ArgumentNullException(nameof(log));
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
     }
 
-    public Task Execute()
+    public Task Handle(ShowAlezCertificatesRequest request, CancellationToken cancellationToken)
     {
-        WatersCertificateIdentifiers watersCertificateIdentifiers = new();
+        AlezCertificateIdentifiers alezCertificateIdentifiers = new();
 
-        IEnumerable<CertificateIdentifier> certificateIdentifiers = CertificateType switch
+        IEnumerable<CertificateIdentifier> certificateIdentifiers = request.CertificateType switch
         {
-            CertificateType.Root => watersCertificateIdentifiers.Where(x => x.StoreName == StoreName.Root),
-            CertificateType.Intermediate => watersCertificateIdentifiers.Where(x => x.StoreName == StoreName.CertificateAuthority),
-            CertificateType.Normal => watersCertificateIdentifiers.Where(x => x.StoreName == StoreName.My),
-            _ => watersCertificateIdentifiers
+            CertificateType.Root => alezCertificateIdentifiers.Where(x => x.StoreName == StoreName.Root),
+            CertificateType.Intermediate => alezCertificateIdentifiers.Where(x => x.StoreName == StoreName.CertificateAuthority),
+            CertificateType.Normal => alezCertificateIdentifiers.Where(x => x.StoreName == StoreName.My),
+            _ => alezCertificateIdentifiers
         };
 
-        if (Filter != null)
-            certificateIdentifiers = certificateIdentifiers.Where(x => x.Name.Contains(Filter));
+        if (request.Subject != null)
+            certificateIdentifiers = certificateIdentifiers.Where(x => x.Name.Contains(request.Subject));
 
         foreach (CertificateIdentifier watersCertificateIdentifier in certificateIdentifiers)
-            Show(watersCertificateIdentifier);
+            FindAndShow(watersCertificateIdentifier, request.Details);
 
         return Task.CompletedTask;
     }
 
-    private void Show(CertificateIdentifier certificateIdentifier)
+    private void FindAndShow(CertificateIdentifier certificateIdentifier, CertificateDetailsType details)
     {
         FindCertificateStep findCertificateStep = new(log, certificateRepository)
         {
@@ -70,15 +58,15 @@ internal class ShowWatersCertificatesCommand : IConsoleCommand
 
             foreach (GenericCertificate certificate in foundCertificates)
             {
-                ShowCertificate(certificate, index);
+                ShowCertificate(certificate, index, details);
                 index++;
             }
         }
     }
 
-    private void ShowCertificate(GenericCertificate certificate, int index)
+    private void ShowCertificate(GenericCertificate certificate, int index, CertificateDetailsType details)
     {
-        switch (Details)
+        switch (details)
         {
             case CertificateDetailsType.Full:
                 ShowOverview(certificate, index);

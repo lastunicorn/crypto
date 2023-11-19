@@ -1,68 +1,29 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using DustInTheWind.ConsoleTools.Commando;
-using DustInTheWind.Crypto.Application;
-using DustInTheWind.Crypto.Application.AlezArea;
 using DustInTheWind.Crypto.Application.Steps;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
+using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.CommandsOld;
+namespace DustInTheWind.Crypto.Application.CertificateArea.ShowCertificate;
 
-[NamedCommand("waters-show", Description = "Displays detailed information for all the waters certificates.")]
-internal class ShowWatersCertificatesCommand : IConsoleCommand
+internal class ShowCertificateUseCase : IRequestHandler<ShowCertificateRequest>
 {
+    private const StoreLocation DefaultStoreLocation = StoreLocation.CurrentUser;
+    private const StoreName DefaultStoreName = StoreName.My;
+
     private readonly ILog log;
     private readonly ICertificateRepository certificateRepository;
 
-    [NamedParameter("type", ShortName = 't', IsOptional = true)]
-    public CertificateType CertificateType { get; set; } = CertificateType.All;
-
-    [NamedParameter("filter", ShortName = 'f', IsOptional = true)]
-    public string Filter { get; set; }
-
-    [NamedParameter("details", ShortName = 'd', IsOptional = true)]
-    public CertificateDetailsType Details { get; set; }
-
-    public ShowWatersCertificatesCommand(ILog log, ICertificateRepository certificateRepository)
+    public ShowCertificateUseCase(ILog log, ICertificateRepository certificateRepository)
     {
         this.log = log ?? throw new ArgumentNullException(nameof(log));
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
     }
 
-    public Task Execute()
+    public Task Handle(ShowCertificateRequest request, CancellationToken cancellationToken)
     {
-        WatersCertificateIdentifiers watersCertificateIdentifiers = new();
-
-        IEnumerable<CertificateIdentifier> certificateIdentifiers = CertificateType switch
-        {
-            CertificateType.Root => watersCertificateIdentifiers.Where(x => x.StoreName == StoreName.Root),
-            CertificateType.Intermediate => watersCertificateIdentifiers.Where(x => x.StoreName == StoreName.CertificateAuthority),
-            CertificateType.Normal => watersCertificateIdentifiers.Where(x => x.StoreName == StoreName.My),
-            _ => watersCertificateIdentifiers
-        };
-
-        if (Filter != null)
-            certificateIdentifiers = certificateIdentifiers.Where(x => x.Name.Contains(Filter));
-
-        foreach (CertificateIdentifier watersCertificateIdentifier in certificateIdentifiers)
-            Show(watersCertificateIdentifier);
-
-        return Task.CompletedTask;
-    }
-
-    private void Show(CertificateIdentifier certificateIdentifier)
-    {
-        FindCertificateStep findCertificateStep = new(log, certificateRepository)
-        {
-            CertificateIdentifier = certificateIdentifier
-        };
-        findCertificateStep.Execute();
-
-        List<GenericCertificate> foundCertificates = findCertificateStep.FoundCertificates;
-
-        if (foundCertificates == null || foundCertificates.Count == 0)
-            return;
+        List<GenericCertificate> foundCertificates = RetrieveCertificates(request);
 
         if (foundCertificates.Count != 0)
         {
@@ -70,15 +31,39 @@ internal class ShowWatersCertificatesCommand : IConsoleCommand
 
             foreach (GenericCertificate certificate in foundCertificates)
             {
-                ShowCertificate(certificate, index);
+                ShowCertificate(certificate, index, request.Details);
                 index++;
             }
         }
+
+        return Task.CompletedTask;
     }
 
-    private void ShowCertificate(GenericCertificate certificate, int index)
+    private List<GenericCertificate> RetrieveCertificates(ShowCertificateRequest request)
     {
-        switch (Details)
+        StoreLocation storeLocation = Enum.IsDefined(typeof(StoreLocation), request.StoreLocation)
+            ? request.StoreLocation
+            : DefaultStoreLocation;
+
+        StoreName storeName = Enum.IsDefined(typeof(StoreName), request.StoreName)
+            ? request.StoreName
+            : DefaultStoreName;
+
+        FindCertificateBySubjectStep findCertificateBySubjectStep = new(log, certificateRepository)
+        {
+            SubjectName = request.SubjectName,
+            StoreLocation = storeLocation,
+            StoreName = storeName
+        };
+
+        findCertificateBySubjectStep.Execute();
+
+        return findCertificateBySubjectStep.FoundCertificates;
+    }
+
+    private void ShowCertificate(GenericCertificate certificate, int index, CertificateDetailsType details)
+    {
+        switch (details)
         {
             case CertificateDetailsType.Full:
                 ShowOverview(certificate, index);

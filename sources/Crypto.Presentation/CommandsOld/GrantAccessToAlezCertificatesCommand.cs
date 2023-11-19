@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using DustInTheWind.ConsoleTools.Commando;
+using DustInTheWind.Crypto.Application.AlezArea;
 using DustInTheWind.Crypto.Application.Steps;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
