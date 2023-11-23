@@ -3,7 +3,7 @@ using DustInTheWind.ConsoleTools.Commando;
 using DustInTheWind.Crypto.Application.CertificateArea.ExportAsPfx;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.CertificateArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.CertificateArea;
 
 [NamedCommand("export-pfx", Description = "Exports a specific certificate from the store as a pfx file.")]
 internal class ExportAsPfxCommand : IConsoleCommand

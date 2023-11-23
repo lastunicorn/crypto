@@ -7,7 +7,7 @@ using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.FileAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.CommandsOld;
+namespace DustInTheWind.Crypto.Presentation.CommandsOld;
 
 /// <summary>
 /// Call Example: crypto alez-remove

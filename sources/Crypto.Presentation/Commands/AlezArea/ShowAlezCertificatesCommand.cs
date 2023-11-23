@@ -4,7 +4,7 @@ using DustInTheWind.Crypto.Application.AlezArea;
 using DustInTheWind.Crypto.Application.AlezArea.ShowAlezCertificates;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.AlezArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.AlezArea;
 
 [NamedCommand("alez-show", Description = "Displays detailed information for all three \"alez\" certificates.")]
 internal class ShowAlezCertificatesCommand : IConsoleCommand

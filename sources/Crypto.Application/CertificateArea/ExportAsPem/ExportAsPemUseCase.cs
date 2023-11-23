@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using DustInTheWind.Crypto.Application.Steps;
+using DustInTheWind.Crypto.Application.Sections;
+using DustInTheWind.Crypto.Domain;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.FileAccess;
@@ -8,7 +9,7 @@ using MediatR;
 
 namespace DustInTheWind.Crypto.Application.CertificateArea.ExportAsPem;
 
-internal class ExportAsPemUseCase : IRequestHandler<ExportAsPemRequest>
+internal class ExportAsPemUseCase : IRequestHandler<ExportAsPemRequest, ExportAsPemResponse>
 {
     private const StoreLocation DefaultStoreLocation = StoreLocation.CurrentUser;
     private const StoreName DefaultStoreName = StoreName.My;
@@ -17,6 +18,8 @@ internal class ExportAsPemUseCase : IRequestHandler<ExportAsPemRequest>
     private readonly ILog log;
     private readonly ICertificateRepository certificateRepository;
 
+    private ExportAsPemResponse response;
+
     public ExportAsPemUseCase(IFileSystem fileSystem, ILog log, ICertificateRepository certificateRepository)
     {
         this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -24,19 +27,14 @@ internal class ExportAsPemUseCase : IRequestHandler<ExportAsPemRequest>
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
     }
 
-    public Task Handle(ExportAsPemRequest request, CancellationToken cancellationToken)
+    public Task<ExportAsPemResponse> Handle(ExportAsPemRequest request, CancellationToken cancellationToken)
     {
+        response = new ExportAsPemResponse();
+
         IEnumerable<GenericCertificate> certificates = RetrieveCertificates(request);
+        ExportCertificates(certificates);
 
-        int index = 0;
-
-        foreach (GenericCertificate genericCertificate in certificates)
-        {
-            ExportCertificate(genericCertificate, index);
-            index++;
-        }
-
-        return Task.CompletedTask;
+        return Task.FromResult(response);
     }
 
     private IEnumerable<GenericCertificate> RetrieveCertificates(ExportAsPemRequest request)
@@ -49,28 +47,59 @@ internal class ExportAsPemUseCase : IRequestHandler<ExportAsPemRequest>
             ? request.StoreName
             : DefaultStoreName;
 
-        FindCertificateStep findCertificateStep = new(log, certificateRepository)
+        CertificateIdentifier certificateIdentifier = new()
         {
-            CertificateIdentifier = new CertificateIdentifier
-            {
-                Name = request.SubjectName,
-                StoreLocation = storeLocation,
-                StoreName = storeName
-            }
+            Name = request.SubjectName,
+            StoreLocation = storeLocation,
+            StoreName = storeName
         };
 
-        findCertificateStep.Execute();
+        List<GenericCertificate> foundCertificates = certificateRepository.Get(certificateIdentifier)
+            .ToList();
 
-        return findCertificateStep.FoundCertificates;
+        response.FindCertificateResult = new FindCertificateResult
+        {
+            StoreLocation = storeLocation,
+            StoreName = storeName,
+            CertificateName = request.SubjectName,
+            CertificateCount = (int)foundCertificates?.Count
+        };
+
+        return foundCertificates;
+    }
+
+    private void ExportCertificates(IEnumerable<GenericCertificate> certificates)
+    {
+        int index = 0;
+
+        foreach (GenericCertificate genericCertificate in certificates)
+        {
+            ExportCertificate(genericCertificate, index);
+            index++;
+        }
     }
 
     private void ExportCertificate(GenericCertificate certificate, int index)
     {
-        SaveCertificateAsPemStep saveCertificateAsPemStep = new(log, fileSystem)
+        string fileName = $"certificate-{index:00}.pem";
+
+        ExportAsPemResult result = new()
         {
-            Certificate = certificate,
-            FileName = $"certificate-{index:00}.pem"
+            Thumbprint = certificate.Thumbprint,
+            FileName = fileName
         };
-        saveCertificateAsPemStep.Execute();
+
+        try
+        {
+            PemDocument pemDocument = certificate.ExportAsPem();
+
+            fileSystem.SaveFile(fileName, pemDocument);
+        }
+        catch (Exception ex)
+        {
+            result.Error = ex;
+        }
+
+        response.SaveCertificateAsPemSections.Add(result);
     }
 }

@@ -65,6 +65,19 @@ public class CertificateRepository : ICertificateRepository
         });
     }
 
+    public bool IsInstalled(GenericCertificate certificate)
+    {
+        StoreName storeName = certificate.StoreName;
+        StoreLocation storeLocation = certificate.StoreLocation;
+
+        return ExecuteWithStore(storeName, storeLocation, store =>
+        {
+            store.Open(OpenFlags.ReadWrite);
+
+            return store.Certificates.Contains(certificate.Value);
+        });
+    }
+
     private static T ExecuteWithStore<T>(StoreName storeName, StoreLocation storeLocation, Func<X509Store, T> action)
     {
         X509Store store = new(storeName, storeLocation);

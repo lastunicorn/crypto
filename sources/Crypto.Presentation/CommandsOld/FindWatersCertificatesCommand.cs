@@ -4,7 +4,7 @@ using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.CommandsOld;
+namespace DustInTheWind.Crypto.Presentation.CommandsOld;
 
 [NamedCommand("waters-find", Description = "Search in the store for the \"waters\" certificates.")]
 internal class FindWatersCertificatesCommand : IConsoleCommand

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace DustInTheWind.Crypto.Application.CertificateArea.ExportAsPem;
 
-public class ExportAsPemRequest : IRequest
+public class ExportAsPemRequest : IRequest<ExportAsPemResponse>
 {
     public StoreLocation StoreLocation { get; set; }
 

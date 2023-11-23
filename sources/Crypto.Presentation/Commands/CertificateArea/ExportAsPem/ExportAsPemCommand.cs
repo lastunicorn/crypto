@@ -3,10 +3,10 @@ using DustInTheWind.ConsoleTools.Commando;
 using DustInTheWind.Crypto.Application.CertificateArea.ExportAsPem;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.CertificateArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.CertificateArea.ExportAsPem;
 
 [NamedCommand("export-pem", Description = "Exports a specific certificate from the store as a pem file.")]
-internal class ExportAsPemCommand : IConsoleCommand
+internal class ExportAsPemCommand : IConsoleCommand<ExportAsPemViewModel>
 {
     private readonly IMediator mediator;
 
@@ -24,7 +24,7 @@ internal class ExportAsPemCommand : IConsoleCommand
         this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public async Task Execute()
+    public async Task<ExportAsPemViewModel> Execute()
     {
         ExportAsPemRequest request = new()
         {
@@ -33,6 +33,12 @@ internal class ExportAsPemCommand : IConsoleCommand
             SubjectName = SubjectName
         };
 
-        await mediator.Send(request);
+        ExportAsPemResponse response = await mediator.Send(request);
+
+        return new ExportAsPemViewModel
+        {
+            FindCertificateResult = response.FindCertificateResult,
+            ExportAsPemSections = response.SaveCertificateAsPemSections
+        };
     }
 }

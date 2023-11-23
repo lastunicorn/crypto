@@ -3,7 +3,7 @@ using DustInTheWind.Crypto.Application.AlezArea;
 using DustInTheWind.Crypto.Application.AlezArea.CreateAlezCertificates;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.AlezArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.AlezArea;
 
 /// <summary>
 /// Call Example: crypto alez-create

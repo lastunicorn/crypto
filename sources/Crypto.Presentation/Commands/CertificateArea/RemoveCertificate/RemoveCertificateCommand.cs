@@ -3,13 +3,13 @@ using DustInTheWind.ConsoleTools.Commando;
 using DustInTheWind.Crypto.Application.CertificateArea.RemoveCertificate;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.CertificateArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.CertificateArea.RemoveCertificate;
 
 /// <summary>
 /// Call Example: crypto remove -n "Dummy Root CA" -L LocalMachine -S Root
 /// </summary>
 [NamedCommand("remove", Description = "Removes the specified certificate from the store.")]
-internal class RemoveCertificateCommand : IConsoleCommand
+internal class RemoveCertificateCommand : IConsoleCommand<RemoveCertificateViewModel>
 {
     private readonly IMediator mediator;
 
@@ -27,7 +27,7 @@ internal class RemoveCertificateCommand : IConsoleCommand
         this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public async Task Execute()
+    public async Task<RemoveCertificateViewModel> Execute()
     {
         RemoveCertificateRequest request = new()
         {
@@ -36,6 +36,12 @@ internal class RemoveCertificateCommand : IConsoleCommand
             Name = Name
         };
 
-        await mediator.Send(request);
+        RemoveCertificateResponse response = await mediator.Send(request);
+
+        return new RemoveCertificateViewModel
+        {
+            FindCertificateResult = response.FindCertificateResult,
+            RemoveCertificateResults = response.RemoveCertificateResults
+        };
     }
 }

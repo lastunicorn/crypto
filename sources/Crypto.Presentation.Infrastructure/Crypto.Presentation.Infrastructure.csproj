@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>DustInTheWind.Crypto.Presentation.Infrastructure</AssemblyName>
+        <RootNamespace>DustInTheWind.Crypto.Presentation.Infrastructure</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ConsoleTools.Commando" Version="2.0.0" />
+    </ItemGroup>
+
+</Project>

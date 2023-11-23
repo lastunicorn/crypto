@@ -23,9 +23,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Ports.CertificateAcc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Adapters.CertificateAccess", "Crypto.Adapters.CertificateAccess\Crypto.Adapters.CertificateAccess.csproj", "{46727A47-8D4B-438D-B27A-476F6CE9B77E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crypto.Presentation", "Crypto.Presentation\Crypto.Presentation.csproj", "{4447E993-9E91-4C4B-9914-A5740BF0B944}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Presentation", "Crypto.Presentation\Crypto.Presentation.csproj", "{4447E993-9E91-4C4B-9914-A5740BF0B944}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crypto.Application", "Crypto.Application\Crypto.Application.csproj", "{FF16A298-2464-46C3-BAD5-B5CFC28F3CD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Application", "Crypto.Application\Crypto.Application.csproj", "{FF16A298-2464-46C3-BAD5-B5CFC28F3CD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crypto.Ports.UserAccess", "Crypto.Ports.UserAccess\Crypto.Ports.UserAccess.csproj", "{FCD171C1-2B9A-466C-9512-7141F0BDA008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crypto.Adapters.UserAccess", "Crypto.Adapters.UserAccess\Crypto.Adapters.UserAccess.csproj", "{ACF0CB07-EA86-44C2-807F-F3CECC985F08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crypto.Presentation.Infrastructure", "Crypto.Presentation.Infrastructure\Crypto.Presentation.Infrastructure.csproj", "{EC1DCB3E-01F5-49D4-BC25-1A177BA44098}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +79,18 @@ Global
 		{FF16A298-2464-46C3-BAD5-B5CFC28F3CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF16A298-2464-46C3-BAD5-B5CFC28F3CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF16A298-2464-46C3-BAD5-B5CFC28F3CD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCD171C1-2B9A-466C-9512-7141F0BDA008}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD171C1-2B9A-466C-9512-7141F0BDA008}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD171C1-2B9A-466C-9512-7141F0BDA008}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD171C1-2B9A-466C-9512-7141F0BDA008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACF0CB07-EA86-44C2-807F-F3CECC985F08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACF0CB07-EA86-44C2-807F-F3CECC985F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACF0CB07-EA86-44C2-807F-F3CECC985F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACF0CB07-EA86-44C2-807F-F3CECC985F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC1DCB3E-01F5-49D4-BC25-1A177BA44098}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC1DCB3E-01F5-49D4-BC25-1A177BA44098}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC1DCB3E-01F5-49D4-BC25-1A177BA44098}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC1DCB3E-01F5-49D4-BC25-1A177BA44098}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +102,8 @@ Global
 		{B470937D-EB63-4EA2-A3D6-479851F00975} = {529C5682-0A5F-4818-B78A-4AD81F1AF551}
 		{15D0A47C-957C-40FC-A32E-BD33E119289B} = {2CA0306D-3981-415F-98FE-0BBB90928E86}
 		{46727A47-8D4B-438D-B27A-476F6CE9B77E} = {529C5682-0A5F-4818-B78A-4AD81F1AF551}
+		{FCD171C1-2B9A-466C-9512-7141F0BDA008} = {2CA0306D-3981-415F-98FE-0BBB90928E86}
+		{ACF0CB07-EA86-44C2-807F-F3CECC985F08} = {529C5682-0A5F-4818-B78A-4AD81F1AF551}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E56B018C-195C-4D65-B7BB-168693E9F5AC}

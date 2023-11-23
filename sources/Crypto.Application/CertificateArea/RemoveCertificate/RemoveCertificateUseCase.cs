@@ -1,30 +1,44 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using DustInTheWind.Crypto.Application.Steps;
+using DustInTheWind.Crypto.Application.Sections;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.FileAccess;
-using DustInTheWind.Crypto.Ports.LogAccess;
 using MediatR;
 
 namespace DustInTheWind.Crypto.Application.CertificateArea.RemoveCertificate;
 
-internal class RemoveCertificateUseCase : IRequestHandler<RemoveCertificateRequest>
+internal class RemoveCertificateUseCase : IRequestHandler<RemoveCertificateRequest, RemoveCertificateResponse>
 {
     private const StoreLocation DefaultStoreLocation = StoreLocation.CurrentUser;
     private const StoreName DefaultStoreName = StoreName.My;
 
-    private readonly ILog log;
     private readonly ICertificateRepository certificateRepository;
     private readonly IFileSystem fileSystem;
 
-    public RemoveCertificateUseCase(ILog log, ICertificateRepository certificateRepository, IFileSystem fileSystem)
+    private RemoveCertificateResponse response;
+
+    public RemoveCertificateUseCase(ICertificateRepository certificateRepository, IFileSystem fileSystem)
     {
-        this.log = log ?? throw new ArgumentNullException(nameof(log));
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
         this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public Task Handle(RemoveCertificateRequest request, CancellationToken cancellationToken)
+    public Task<RemoveCertificateResponse> Handle(RemoveCertificateRequest request, CancellationToken cancellationToken)
+    {
+        response = new RemoveCertificateResponse();
+
+        List<GenericCertificate> certificates = RetrieveCertificates(request);
+
+        if (certificates is { Count: not 0 })
+        {
+            foreach (GenericCertificate certificate in certificates)
+                RemoveCertificate(certificate);
+        }
+
+        return Task.FromResult(response);
+    }
+
+    private List<GenericCertificate> RetrieveCertificates(RemoveCertificateRequest request)
     {
         StoreLocation storeLocation = Enum.IsDefined(typeof(StoreLocation), request.StoreLocation)
             ? request.StoreLocation
@@ -34,30 +48,32 @@ internal class RemoveCertificateUseCase : IRequestHandler<RemoveCertificateReque
             ? request.StoreName
             : DefaultStoreName;
 
-        FindCertificateStep findCertificateStep = new(log, certificateRepository)
+        CertificateIdentifier certificateIdentifier = new()
         {
-            CertificateIdentifier = new CertificateIdentifier
-            {
-                Name = request.Name,
-                StoreLocation = storeLocation,
-                StoreName = storeName
-            }
+            Name = request.Name,
+            StoreLocation = storeLocation,
+            StoreName = storeName
         };
 
-        findCertificateStep.Execute();
+        List<GenericCertificate> foundCertificates = certificateRepository.Get(certificateIdentifier)
+            .ToList();
 
-        if (findCertificateStep.FoundCertificates is { Count: not 0 })
+        response.FindCertificateResult = new FindCertificateResult
         {
-            RemoveCertificateFromStoreStep removeCertificateFromStoreStep = new(log, certificateRepository)
-            {
-                Certificates = findCertificateStep.FoundCertificates
-            };
+            StoreLocation = storeLocation,
+            StoreName = storeName,
+            CertificateName = request.Name,
+            CertificateCount = (int)foundCertificates?.Count
+        };
 
-            removeCertificateFromStoreStep.Execute();
+        return foundCertificates;
+    }
 
-            return Task.CompletedTask;
-        }
+    private void RemoveCertificate(GenericCertificate certificate)
+    {
+        CertificateRemoval certificateRemoval = new(certificate, certificateRepository);
+        RemoveCertificateResult result = certificateRemoval.Execute();
 
-        return Task.CompletedTask;
+        response.RemoveCertificateResults.Add(result);
     }
 }

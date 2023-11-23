@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>DustInTheWind.Crypto.Ports.UserAccess</AssemblyName>
+        <RootNamespace>DustInTheWind.Crypto.Ports.UserAccess</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Crypto.Domain\Crypto.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

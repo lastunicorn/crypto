@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>DustInTheWind.Crypto.Presentation.Controls</AssemblyName>
+        <RootNamespace>DustInTheWind.Crypto.Presentation.Controls</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="Controls\**" />
+      <EmbeddedResource Remove="Controls\**" />
+      <None Remove="Controls\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ConsoleTools.Commando" Version="2.0.0" />
+    </ItemGroup>
+
+</Project>

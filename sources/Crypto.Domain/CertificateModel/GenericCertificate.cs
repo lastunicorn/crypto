@@ -59,4 +59,37 @@ public class GenericCertificate
     {
         return Value.GetRSAPrivateKey();
     }
+
+    public X509SubjectKeyIdentifierExtension GetSki()
+    {
+        X509Extension x509Extension = Value?.Extensions
+            .FirstOrDefault(x => x.Oid?.FriendlyName == "Subject Key Identifier");
+
+        return x509Extension as X509SubjectKeyIdentifierExtension;
+    }
+
+    public X509Extension GetAki()
+    {
+        return Value?.Extensions
+            .FirstOrDefault(x => x.Oid?.Value == OidValues.AuthorityKeyIdentifier);
+    }
+
+    public bool IsChildOf(GenericCertificate parentCert)
+    {
+        X509SubjectKeyIdentifierExtension subjectKeyIdentifier = parentCert.GetSki();
+        X509Extension aki = GetAki();
+
+        if (aki == null)
+            return false;
+
+        string parentSki = subjectKeyIdentifier?.Format(false) ?? string.Empty;
+        string certAki = aki.Format(false) ?? string.Empty;
+
+        return certAki.Contains(parentSki);
+    }
+
+    public IEnumerable<X509Extension> EnumerateExtensions()
+    {
+        return Value?.Extensions;
+    }
 }

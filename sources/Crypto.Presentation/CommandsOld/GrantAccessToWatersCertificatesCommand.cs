@@ -6,7 +6,7 @@ using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.CommandsOld;
+namespace DustInTheWind.Crypto.Presentation.CommandsOld;
 
 [NamedCommand("waters-grant-access", Description = "Give read permissions to everyone for accessing the \"waters\" certificates.")]
 internal class GrantAccessToWatersCertificatesCommand : IConsoleCommand

@@ -1,22 +1,26 @@
-﻿using DustInTheWind.Crypto.Application.Steps;
+﻿using DustInTheWind.Crypto.Domain.HashEncryption;
 using DustInTheWind.Crypto.Ports.LogAccess;
 using MediatR;
 
 namespace DustInTheWind.Crypto.Application.EncryptionArea.Hash;
 
-internal class HashUseCase : IRequestHandler<HashRequest>
+internal class HashUseCase : IRequestHandler<HashRequest, HashResponse>
 {
     private const string DefaultTextToEncrypt = "Here is some data to encrypt!";
 
     private readonly ILog log;
+
+    private HashResponse response;
 
     public HashUseCase(ILog log)
     {
         this.log = log ?? throw new ArgumentNullException(nameof(log));
     }
 
-    public Task Handle(HashRequest request, CancellationToken cancellationToken)
+    public Task<HashResponse> Handle(HashRequest request, CancellationToken cancellationToken)
     {
+        response = new HashResponse();
+
         string textToEncrypt = request.Text ?? DefaultTextToEncrypt;
 
         if (request.Algorithm is HashAlgorithmEnum.All or HashAlgorithmEnum.Md5)
@@ -34,56 +38,76 @@ internal class HashUseCase : IRequestHandler<HashRequest>
         if (request.Algorithm is HashAlgorithmEnum.All or HashAlgorithmEnum.Sha512)
             EncryptWithSha512(textToEncrypt);
 
-        return Task.CompletedTask;
+        return Task.FromResult(response);
     }
 
     private void EncryptWithMd5(string textToEncrypt)
     {
-        Md5EncryptStep md5EncryptStep = new(log)
+        Md5EncryptedText encryptedText = new(textToEncrypt);
+
+        EncryptionResult result = new()
         {
-            Message = textToEncrypt
+            HashAlgorithm = HashAlgorithmEnum.Md5,
+            OriginalMessage = textToEncrypt,
+            EncryptedMessage = encryptedText
         };
 
-        md5EncryptStep.Execute();
+        response.EncryptionResults.Add(result);
     }
 
     private void EncryptWithSha1(string textToEncrypt)
     {
-        Sha1EncryptStep sha1EncryptStep = new(log)
+        Sha1EncryptedText encryptedText = new(textToEncrypt);
+
+        EncryptionResult result = new()
         {
-            Message = textToEncrypt
+            HashAlgorithm = HashAlgorithmEnum.Sha1,
+            OriginalMessage = textToEncrypt,
+            EncryptedMessage = encryptedText
         };
 
-        sha1EncryptStep.Execute();
+        response.EncryptionResults.Add(result);
     }
 
     private void EncryptWithSha256(string textToEncrypt)
     {
-        Sha256EncryptStep sha256EncryptStep = new(log)
+        Sha256EncryptedText encryptedText = new(textToEncrypt);
+
+        EncryptionResult result = new()
         {
-            Message = textToEncrypt
+            HashAlgorithm = HashAlgorithmEnum.Sha256,
+            OriginalMessage = textToEncrypt,
+            EncryptedMessage = encryptedText
         };
 
-        sha256EncryptStep.Execute();
+        response.EncryptionResults.Add(result);
     }
 
     private void EncryptWithSha384(string textToEncrypt)
     {
-        Sha384EncryptStep sha384EncryptStep = new(log)
+        Sha384EncryptedText encryptedText = new(textToEncrypt);
+
+        EncryptionResult result = new()
         {
-            Message = textToEncrypt
+            HashAlgorithm = HashAlgorithmEnum.Sha384,
+            OriginalMessage = textToEncrypt,
+            EncryptedMessage = encryptedText
         };
 
-        sha384EncryptStep.Execute();
+        response.EncryptionResults.Add(result);
     }
 
     private void EncryptWithSha512(string textToEncrypt)
     {
-        Sha512EncryptStep sha512EncryptStep = new(log)
+        Sha512EncryptedText encryptedText = new(textToEncrypt);
+
+        EncryptionResult result = new()
         {
-            Message = textToEncrypt
+            HashAlgorithm = HashAlgorithmEnum.Sha512,
+            OriginalMessage = textToEncrypt,
+            EncryptedMessage = encryptedText
         };
 
-        sha512EncryptStep.Execute();
+        response.EncryptionResults.Add(result);
     }
 }

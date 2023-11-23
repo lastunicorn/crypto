@@ -3,7 +3,7 @@ using DustInTheWind.ConsoleTools.Commando;
 using DustInTheWind.Crypto.Application.CertificateArea.CreateIntermediateCertificate;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.CertificateArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.CertificateArea;
 
 [NamedCommand("create-intermediate", Description = "Creates an intermediate certificate and installs it in the store.")]
 internal class CreateIntermediateCertificateCommand : IConsoleCommand

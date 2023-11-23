@@ -3,7 +3,7 @@ using DustInTheWind.ConsoleTools.Commando;
 using DustInTheWind.Crypto.Application.CertificateArea.CreateRootCertificate;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.CertificateArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.CertificateArea;
 
 /// <summary>
 /// Call Example: crypto create-root -n "Dummy Root CA" -f "Dummy Root Certificate Authority"

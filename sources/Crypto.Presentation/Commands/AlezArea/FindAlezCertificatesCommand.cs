@@ -2,7 +2,7 @@
 using DustInTheWind.Crypto.Application.AlezArea.FindAlezCertificates;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.AlezArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.AlezArea;
 
 [NamedCommand("alez-find", Description = "Search in the store for the \"alez\" certificates.")]
 internal class FindAlezCertificatesCommand : IConsoleCommand

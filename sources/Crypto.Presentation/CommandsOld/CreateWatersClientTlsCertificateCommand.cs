@@ -6,19 +6,22 @@ using DustInTheWind.Crypto.Domain;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
+using DustInTheWind.Crypto.Ports.UserAccess;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.CommandsOld;
+namespace DustInTheWind.Crypto.Presentation.CommandsOld;
 
 [NamedCommand("create-waters-tls", Enabled = false)]
 internal class CreateWatersClientTlsCertificateCommand : IConsoleCommand
 {
     private readonly ILog log;
     private readonly ICertificateRepository certificateRepository;
+    private readonly IUserInterface userInterface;
 
-    public CreateWatersClientTlsCertificateCommand(ILog log, ICertificateRepository certificateRepository)
+    public CreateWatersClientTlsCertificateCommand(ILog log, ICertificateRepository certificateRepository, IUserInterface userInterface)
     {
         this.log = log ?? throw new ArgumentNullException(nameof(log));
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
+        this.userInterface = userInterface ?? throw new ArgumentNullException(nameof(userInterface));
     }
 
     public Task Execute()
@@ -73,7 +76,7 @@ internal class CreateWatersClientTlsCertificateCommand : IConsoleCommand
 
     private void ShowCertificate(GenericCertificate certificate)
     {
-        ShowCertificateOverviewStep showCertificateOverviewStep = new(log)
+        ShowCertificateOverviewStep showCertificateOverviewStep = new(log, userInterface)
         {
             Certificate = certificate
         };

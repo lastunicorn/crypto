@@ -2,6 +2,7 @@
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
+using DustInTheWind.Crypto.Ports.UserAccess;
 using MediatR;
 
 namespace DustInTheWind.Crypto.Application.AlezArea.CreateAlezCertificates;
@@ -10,15 +11,17 @@ internal class CreateAlezCertificatesUseCase : IRequestHandler<CreateAlezCertifi
 {
     private readonly ILog log;
     private readonly ICertificateRepository certificateRepository;
+    private readonly IUserInterface userInterface;
 
     private GenericCertificate rootCertificate;
     private GenericCertificate intermediateCertificate;
     private GenericCertificate normalCertificate;
 
-    public CreateAlezCertificatesUseCase(ILog log, ICertificateRepository certificateRepository)
+    public CreateAlezCertificatesUseCase(ILog log, ICertificateRepository certificateRepository, IUserInterface userInterface)
     {
         this.log = log ?? throw new ArgumentNullException(nameof(log));
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
+        this.userInterface = userInterface ?? throw new ArgumentNullException(nameof(userInterface));
     }
 
     public Task Handle(CreateAlezCertificatesRequest request, CancellationToken cancellationToken)
@@ -154,7 +157,7 @@ internal class CreateAlezCertificatesUseCase : IRequestHandler<CreateAlezCertifi
 
     private void ShowCertificate(GenericCertificate certificate, string details)
     {
-        ShowCertificateOverviewStep showCertificateOverviewStep = new(log)
+        ShowCertificateOverviewStep showCertificateOverviewStep = new(log, userInterface)
         {
             Subtitle = details,
             Certificate = certificate

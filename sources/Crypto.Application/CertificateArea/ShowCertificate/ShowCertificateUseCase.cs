@@ -3,6 +3,7 @@ using DustInTheWind.Crypto.Application.Steps;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
+using DustInTheWind.Crypto.Ports.UserAccess;
 using MediatR;
 
 namespace DustInTheWind.Crypto.Application.CertificateArea.ShowCertificate;
@@ -14,11 +15,13 @@ internal class ShowCertificateUseCase : IRequestHandler<ShowCertificateRequest>
 
     private readonly ILog log;
     private readonly ICertificateRepository certificateRepository;
+    private readonly IUserInterface userInterface;
 
-    public ShowCertificateUseCase(ILog log, ICertificateRepository certificateRepository)
+    public ShowCertificateUseCase(ILog log, ICertificateRepository certificateRepository, IUserInterface userInterface)
     {
         this.log = log ?? throw new ArgumentNullException(nameof(log));
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
+        this.userInterface = userInterface ?? throw new ArgumentNullException(nameof(userInterface));
     }
 
     public Task Handle(ShowCertificateRequest request, CancellationToken cancellationToken)
@@ -94,7 +97,7 @@ internal class ShowCertificateUseCase : IRequestHandler<ShowCertificateRequest>
 
     private void ShowOverview(GenericCertificate certificate, int index)
     {
-        ShowCertificateOverviewStep showCertificateOverviewStep = new(log)
+        ShowCertificateOverviewStep showCertificateOverviewStep = new(log, userInterface)
         {
             Subtitle = index.ToString(),
             Certificate = certificate
@@ -127,7 +130,7 @@ internal class ShowCertificateUseCase : IRequestHandler<ShowCertificateRequest>
 
     private void ShowKeyLocation(GenericCertificate certificate, int index)
     {
-        ShowCertificateLocationStep showCertificateLocationStep = new(log)
+        ShowCertificateLocationStep showCertificateLocationStep = new(log, userInterface)
         {
             Subtitle = index.ToString(),
             Certificate = certificate

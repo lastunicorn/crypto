@@ -6,14 +6,16 @@ using DustInTheWind.Crypto.Application.Steps;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
+using DustInTheWind.Crypto.Ports.UserAccess;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.CommandsOld;
+namespace DustInTheWind.Crypto.Presentation.CommandsOld;
 
 [NamedCommand("waters-show", Description = "Displays detailed information for all the waters certificates.")]
 internal class ShowWatersCertificatesCommand : IConsoleCommand
 {
     private readonly ILog log;
     private readonly ICertificateRepository certificateRepository;
+    private readonly IUserInterface userInterface;
 
     [NamedParameter("type", ShortName = 't', IsOptional = true)]
     public CertificateType CertificateType { get; set; } = CertificateType.All;
@@ -24,10 +26,11 @@ internal class ShowWatersCertificatesCommand : IConsoleCommand
     [NamedParameter("details", ShortName = 'd', IsOptional = true)]
     public CertificateDetailsType Details { get; set; }
 
-    public ShowWatersCertificatesCommand(ILog log, ICertificateRepository certificateRepository)
+    public ShowWatersCertificatesCommand(ILog log, ICertificateRepository certificateRepository, IUserInterface userInterface)
     {
         this.log = log ?? throw new ArgumentNullException(nameof(log));
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
+        this.userInterface = userInterface ?? throw new ArgumentNullException(nameof(userInterface));
     }
 
     public Task Execute()
@@ -109,7 +112,7 @@ internal class ShowWatersCertificatesCommand : IConsoleCommand
 
     private void ShowOverview(GenericCertificate certificate, int index)
     {
-        ShowCertificateOverviewStep showCertificateOverviewStep = new(log)
+        ShowCertificateOverviewStep showCertificateOverviewStep = new(log, userInterface)
         {
             Subtitle = index.ToString(),
             Certificate = certificate
@@ -142,7 +145,7 @@ internal class ShowWatersCertificatesCommand : IConsoleCommand
 
     private void ShowKeyLocation(GenericCertificate certificate, int index)
     {
-        ShowCertificateLocationStep showCertificateLocationStep = new(log)
+        ShowCertificateLocationStep showCertificateLocationStep = new(log, userInterface)
         {
             Subtitle = index.ToString(),
             Certificate = certificate

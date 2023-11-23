@@ -4,7 +4,7 @@ using DustInTheWind.Crypto.Application;
 using DustInTheWind.Crypto.Application.CertificateArea.ShowCertificate;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.CertificateArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.CertificateArea;
 
 /// <summary>
 /// Call Example: crypto show -s "Dummy Root CA" -S Root -L LocalMachine

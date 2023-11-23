@@ -3,6 +3,7 @@ using DustInTheWind.Crypto.Application.Steps;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
+using DustInTheWind.Crypto.Ports.UserAccess;
 using MediatR;
 
 namespace DustInTheWind.Crypto.Application.CertificateArea.CreateRootCertificate;
@@ -14,11 +15,13 @@ internal class CreateRootCertificateUseCase : IRequestHandler<CreateRootCertific
 
     private readonly ILog log;
     private readonly ICertificateRepository certificateRepository;
+    private readonly IUserInterface userInterface;
 
-    public CreateRootCertificateUseCase(ILog log, ICertificateRepository certificateRepository)
+    public CreateRootCertificateUseCase(ILog log, ICertificateRepository certificateRepository, IUserInterface userInterface)
     {
         this.log = log ?? throw new ArgumentNullException(nameof(log));
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
+        this.userInterface = userInterface ?? throw new ArgumentNullException(nameof(userInterface));
     }
 
     public Task Handle(CreateRootCertificateRequest request, CancellationToken cancellationToken)
@@ -58,7 +61,7 @@ internal class CreateRootCertificateUseCase : IRequestHandler<CreateRootCertific
 
     private void ShowCertificate(GenericCertificate certificate)
     {
-        ShowCertificateOverviewStep showCertificateOverviewStep = new(log)
+        ShowCertificateOverviewStep showCertificateOverviewStep = new(log, userInterface)
         {
             Certificate = certificate
         };

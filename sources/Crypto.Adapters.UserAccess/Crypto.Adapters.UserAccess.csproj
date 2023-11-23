@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>DustInTheWind.Crypto.Adapters.UserAccess</AssemblyName>
+        <RootNamespace>DustInTheWind.Crypto.Adapters.UserAccess</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Crypto.Ports.UserAccess\Crypto.Ports.UserAccess.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Presentation.Infrastructure\Crypto.Presentation.Infrastructure.csproj" PrivateAssets="All" />
+    </ItemGroup>
+
+</Project>

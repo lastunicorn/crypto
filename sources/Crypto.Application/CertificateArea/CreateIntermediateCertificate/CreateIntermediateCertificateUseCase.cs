@@ -3,6 +3,7 @@ using DustInTheWind.Crypto.Application.Steps;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
+using DustInTheWind.Crypto.Ports.UserAccess;
 using MediatR;
 
 namespace DustInTheWind.Crypto.Application.CertificateArea.CreateIntermediateCertificate;
@@ -16,11 +17,13 @@ internal class CreateIntermediateCertificateUseCase : IRequestHandler<CreateInte
 
     private readonly ILog log;
     private readonly ICertificateRepository certificateRepository;
+    private readonly IUserInterface userInterface;
 
-    public CreateIntermediateCertificateUseCase(ILog log, ICertificateRepository certificateRepository)
+    public CreateIntermediateCertificateUseCase(ILog log, ICertificateRepository certificateRepository, IUserInterface userInterface)
     {
         this.log = log ?? throw new ArgumentNullException(nameof(log));
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
+        this.userInterface = userInterface ?? throw new ArgumentNullException(nameof(userInterface));
     }
 
     public Task Handle(CreateIntermediateCertificateRequest request, CancellationToken cancellationToken)
@@ -31,8 +34,8 @@ internal class CreateIntermediateCertificateUseCase : IRequestHandler<CreateInte
         ShowCertificateDetails(intermediateCertificate);
         InstallCertificate(intermediateCertificate);
 
-        //VerifyCertificateIsInstalled(certificate);
-        //VerifyCertificateParent(certificate, parentCertificate);
+        VerifyCertificateIsInstalled(intermediateCertificate);
+        VerifyCertificateParent(intermediateCertificate, parentCertificate);
 
         return Task.CompletedTask;
     }
@@ -89,7 +92,7 @@ internal class CreateIntermediateCertificateUseCase : IRequestHandler<CreateInte
 
     private void ShowCertificateDetails(GenericCertificate certificate)
     {
-        ShowCertificateOverviewStep showCertificateOverviewStep = new(log)
+        ShowCertificateOverviewStep showCertificateOverviewStep = new(log, userInterface)
         {
             Certificate = certificate
         };
@@ -121,9 +124,9 @@ internal class CreateIntermediateCertificateUseCase : IRequestHandler<CreateInte
         installCertificateStep.Execute();
     }
 
-    private void VerifyCertificateIsInstalled(X509Certificate2 certificate)
+    private void VerifyCertificateIsInstalled(GenericCertificate certificate)
     {
-        VerifyCertificateIsInstalledStep verifyCertificateIsInstalledStep = new(log)
+        VerifyCertificateIsInstalledStep verifyCertificateIsInstalledStep = new(log, certificateRepository)
         {
             Certificate = certificate,
             StoreLocation = StoreLocation.CurrentUser,
@@ -133,7 +136,7 @@ internal class CreateIntermediateCertificateUseCase : IRequestHandler<CreateInte
         verifyCertificateIsInstalledStep.Execute();
     }
 
-    private void VerifyCertificateParent(X509Certificate2 certificate, X509Certificate2 parentCertificate)
+    private void VerifyCertificateParent(GenericCertificate certificate, GenericCertificate parentCertificate)
     {
         VerifyCertificateParentStep verifyParentStep = new(log)
         {

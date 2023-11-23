@@ -3,7 +3,7 @@ using MediatR;
 
 namespace DustInTheWind.Crypto.Application.CertificateArea.RemoveCertificate;
 
-public class RemoveCertificateRequest : IRequest
+public class RemoveCertificateRequest : IRequest<RemoveCertificateResponse>
 {
     public StoreLocation StoreLocation { get; set; }
 

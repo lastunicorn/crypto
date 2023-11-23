@@ -16,6 +16,7 @@
         <ProjectReference Include="..\Crypto.Ports.CertificateAccess\Crypto.Ports.CertificateAccess.csproj" PrivateAssets="All" />
         <ProjectReference Include="..\Crypto.Ports.FileAccess\Crypto.Ports.FileAccess.csproj" PrivateAssets="All" />
         <ProjectReference Include="..\Crypto.Ports.LogAccess\Crypto.Ports.LogAccess.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Ports.UserAccess\Crypto.Ports.UserAccess.csproj" />
     </ItemGroup>
 
 </Project>

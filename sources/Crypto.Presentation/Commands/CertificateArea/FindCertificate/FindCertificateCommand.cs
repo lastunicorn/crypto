@@ -3,10 +3,10 @@ using DustInTheWind.ConsoleTools.Commando;
 using DustInTheWind.Crypto.Application.CertificateArea.FindCertificate;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.CertificateArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.CertificateArea.FindCertificate;
 
 [NamedCommand("find", Description = "Search in the store for the specified certificate.")]
-internal class FindCertificateCommand : IConsoleCommand
+internal class FindCertificateCommand : IConsoleCommand<FindCertificateViewModel>
 {
     private readonly IMediator mediator;
 
@@ -24,7 +24,7 @@ internal class FindCertificateCommand : IConsoleCommand
         this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public async Task Execute()
+    public async Task<FindCertificateViewModel> Execute()
     {
         FindCertificateRequest request = new()
         {
@@ -33,6 +33,11 @@ internal class FindCertificateCommand : IConsoleCommand
             Name = Name
         };
 
-        await mediator.Send(request);
+        FindCertificateResponse response = await mediator.Send(request);
+
+        return new FindCertificateViewModel
+        {
+            FindCertificateResult = response.FindCertificateResult
+        };
     }
 }

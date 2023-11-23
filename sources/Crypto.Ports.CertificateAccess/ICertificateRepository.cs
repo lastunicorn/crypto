@@ -12,4 +12,6 @@ public interface ICertificateRepository
     void Add(GenericCertificate certificate, StoreName storeName, StoreLocation storeLocation);
 
     void Remove(GenericCertificate certificate);
+
+    bool IsInstalled(GenericCertificate certificate);
 }

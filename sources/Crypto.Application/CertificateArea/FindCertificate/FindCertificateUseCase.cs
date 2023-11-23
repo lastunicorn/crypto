@@ -1,5 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using DustInTheWind.Crypto.Application.Steps;
+using DustInTheWind.Crypto.Application.Sections;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
@@ -7,7 +7,7 @@ using MediatR;
 
 namespace DustInTheWind.Crypto.Application.CertificateArea.FindCertificate;
 
-internal class FindCertificateUseCase : IRequestHandler<FindCertificateRequest>
+internal class FindCertificateUseCase : IRequestHandler<FindCertificateRequest, FindCertificateResponse>
 {
     private const StoreLocation DefaultStoreLocation = StoreLocation.CurrentUser;
     private const StoreName DefaultStoreName = StoreName.My;
@@ -21,7 +21,7 @@ internal class FindCertificateUseCase : IRequestHandler<FindCertificateRequest>
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
     }
 
-    public Task Handle(FindCertificateRequest request, CancellationToken cancellationToken)
+    public Task<FindCertificateResponse> Handle(FindCertificateRequest request, CancellationToken cancellationToken)
     {
         StoreLocation storeLocation = Enum.IsDefined(typeof(StoreLocation), request.StoreLocation)
             ? request.StoreLocation
@@ -30,19 +30,28 @@ internal class FindCertificateUseCase : IRequestHandler<FindCertificateRequest>
         StoreName storeName = Enum.IsDefined(typeof(StoreName), request.StoreName)
             ? request.StoreName
             : DefaultStoreName;
-
-        FindCertificateStep findCertificateStep = new(log, certificateRepository)
+        
+        CertificateIdentifier certificateIdentifier = new()
         {
-            CertificateIdentifier = new CertificateIdentifier
+            Name = request.Name,
+            StoreLocation = storeLocation,
+            StoreName = storeName
+        };
+
+        List<GenericCertificate> foundCertificates = certificateRepository.Get(certificateIdentifier)
+            .ToList();
+
+        FindCertificateResponse  response = new()
+        {
+            FindCertificateResult = new FindCertificateResult
             {
-                Name = request.Name,
                 StoreLocation = storeLocation,
-                StoreName = storeName
+                StoreName = storeName,
+                CertificateName = request.Name,
+                CertificateCount = (int)foundCertificates?.Count
             }
         };
 
-        findCertificateStep.Execute();
-
-        return Task.CompletedTask;
+        return Task.FromResult(response);
     }
 }

@@ -3,10 +3,10 @@ using DustInTheWind.Crypto.Application;
 using DustInTheWind.Crypto.Application.EncryptionArea.Hash;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.EncryptionArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.EncryptionArea.Hash;
 
 [NamedCommand("hash", Description = "Encrypts the provided text using hashing algorithms: MD5, SHA1, SHA256, SHA384, SHA512.")]
-public class HashCommand : IConsoleCommand
+public class HashCommand : IConsoleCommand<HashViewModel>
 {
     private readonly IMediator mediator;
 
@@ -21,7 +21,7 @@ public class HashCommand : IConsoleCommand
         this.mediator = mediator;
     }
 
-    public async Task Execute()
+    public async Task<HashViewModel> Execute()
     {
         HashRequest request = new()
         {
@@ -29,6 +29,11 @@ public class HashCommand : IConsoleCommand
             Algorithm = Algorithm
         };
 
-        await mediator.Send(request);
+        HashResponse response = await mediator.Send(request);
+
+        return new HashViewModel
+        {
+            HashResults = response.EncryptionResults
+        };
     }
 }

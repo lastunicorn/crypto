@@ -19,18 +19,22 @@ using System.Security.Cryptography.X509Certificates;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Domain.PrivateKeyModel;
 using DustInTheWind.Crypto.Ports.LogAccess;
+using DustInTheWind.Crypto.Ports.UserAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
 public class ShowCertificateLocationStep : StepBase
 {
+    private readonly IUserInterface userInterface;
+
     public override string Title => "Show Certificate Key Location";
 
     public GenericCertificate Certificate { get; set; }
 
-    public ShowCertificateLocationStep(ILog log)
+    public ShowCertificateLocationStep(ILog log, IUserInterface userInterface)
         : base(log)
     {
+        this.userInterface = userInterface ?? throw new ArgumentNullException(nameof(userInterface));
     }
 
     protected override void DoExecute()

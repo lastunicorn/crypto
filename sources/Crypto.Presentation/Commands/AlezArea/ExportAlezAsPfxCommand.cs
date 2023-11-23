@@ -3,7 +3,7 @@ using DustInTheWind.Crypto.Application.AlezArea;
 using DustInTheWind.Crypto.Application.AlezArea.ExportAlezAsPfx;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.AlezArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.AlezArea;
 
 [NamedCommand("alez-export-pfx", Description = "Exports all \"alez\" certificates in pfx files.")]
 internal class ExportAlezAsPfxCommand : IConsoleCommand

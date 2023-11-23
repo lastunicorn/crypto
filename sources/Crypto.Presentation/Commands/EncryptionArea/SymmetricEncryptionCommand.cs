@@ -2,7 +2,7 @@
 using DustInTheWind.Crypto.Application.EncryptionArea.SymmetricEncryption;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.EncryptionArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.EncryptionArea;
 
 [NamedCommand("encrypt", Description = "Encrypts and decrypts the provided text using symmetric encryption algorithms: AES, DES, TripleDES.")]
 internal class SymmetricEncryptionCommand : IConsoleCommand

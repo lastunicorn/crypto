@@ -3,7 +3,7 @@ using DustInTheWind.ConsoleTools.Commando;
 using DustInTheWind.Crypto.Application.CertificateArea.CreateNormalCertificate;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.CertificateArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.CertificateArea;
 
 [NamedCommand("create-normal")]
 internal class CreateNormalCertificateCommand : IConsoleCommand

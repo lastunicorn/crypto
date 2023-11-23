@@ -3,7 +3,7 @@ using DustInTheWind.Crypto.Application.AlezArea;
 using DustInTheWind.Crypto.Application.AlezArea.ExportAlezAsPem;
 using MediatR;
 
-namespace DustInTheWind.Crypto.PresentationAndUseCases.Commands.AlezArea;
+namespace DustInTheWind.Crypto.Presentation.Commands.AlezArea;
 
 [NamedCommand("alez-export-pem", Description = "Exports all \"alez\" certificates in pem files.")]
 internal class ExportAlezAsPemCommand : IConsoleCommand

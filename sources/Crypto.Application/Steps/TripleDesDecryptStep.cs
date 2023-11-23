@@ -5,7 +5,7 @@ namespace DustInTheWind.Crypto.Application.Steps;
 
 public class TripleDesDecryptStep : StepBase
 {
-    public override string Title => "DES (Decrypt)";
+    public override string Title => "Triple DES (Decrypt)";
 
     public byte[] EncryptedMessage { get; set; }
 

@@ -1,45 +1,39 @@
 ﻿using System.Security.Cryptography.X509Certificates;
+using DustInTheWind.Crypto.Domain.CertificateModel;
+using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
 public class VerifyCertificateIsInstalledStep : StepBase
 {
+    private readonly ICertificateRepository certificateRepository;
+
     public override string Title => "Verify Certificate is Installed";
 
     public StoreLocation StoreLocation { get; set; }
 
     public StoreName StoreName { get; set; }
 
-    public X509Certificate2 Certificate { get; set; }
+    public GenericCertificate Certificate { get; set; }
 
-    public VerifyCertificateIsInstalledStep(ILog log)
+    public VerifyCertificateIsInstalledStep(ILog log, ICertificateRepository certificateRepository)
         : base(log)
     {
+        this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
     }
 
     protected override void DoExecute()
     {
-        X509Store store = new(StoreName, StoreLocation);
+        bool isInstalled = certificateRepository.IsInstalled(Certificate);
+        
+        string certificateName = Certificate.GetName();
+        string location = $@"{StoreLocation}\{StoreName}";
 
-        try
-        {
-            store.Open(OpenFlags.ReadWrite);
+        string message = isInstalled
+            ? $"'{certificateName}' is installed in '{location}'."
+            : $"'{certificateName}' is NOT installed in '{location}'.";
 
-            bool exists = store.Certificates.Contains(Certificate);
-
-            string location = $@"{StoreLocation}\{StoreName}";
-            string certificateName = Certificate.GetNameInfo(X509NameType.SimpleName, false);
-
-            string message = exists
-                ? $"'{certificateName}' is installed in '{location}'."
-                : $"'{certificateName}' is NOT installed in '{location}'.";
-
-            Console.WriteLine(message);
-        }
-        finally
-        {
-            store.Close();
-        }
+        Console.WriteLine(message);
     }
 }
