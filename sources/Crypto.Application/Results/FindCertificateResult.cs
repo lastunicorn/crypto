@@ -2,10 +2,8 @@
 
 namespace DustInTheWind.Crypto.Application.Sections;
 
-public class FindCertificateResult : ResultBase
+public class FindCertificateResult
 {
-    public override string Title => "Find Certificate";
-
     public StoreLocation StoreLocation { get; set; }
 
     public StoreName StoreName { get; set; }

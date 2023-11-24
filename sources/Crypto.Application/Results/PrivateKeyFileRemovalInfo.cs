@@ -1,8 +1,8 @@
 ﻿using DustInTheWind.Crypto.Domain.PrivateKeyModel;
 
-namespace DustInTheWind.Crypto.Application.Sections;
+namespace DustInTheWind.Crypto.Application.Results;
 
-public class PrivateKeyFileInfo
+public class PrivateKeyFileRemovalInfo
 {
     public string FilePath { get; set; }
 

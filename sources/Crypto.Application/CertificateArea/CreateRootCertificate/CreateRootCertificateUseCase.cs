@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
+using DustInTheWind.Crypto.Application.Results;
 using DustInTheWind.Crypto.Application.Steps;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
@@ -8,7 +9,7 @@ using MediatR;
 
 namespace DustInTheWind.Crypto.Application.CertificateArea.CreateRootCertificate;
 
-internal class CreateRootCertificateUseCase : IRequestHandler<CreateRootCertificateRequest>
+internal class CreateRootCertificateUseCase : IRequestHandler<CreateRootCertificateRequest, CreateRootCertificateResponse>
 {
     private const StoreLocation DefaultStoreLocation = StoreLocation.CurrentUser;
     private const StoreName DefaultStoreName = StoreName.My;
@@ -17,6 +18,8 @@ internal class CreateRootCertificateUseCase : IRequestHandler<CreateRootCertific
     private readonly ICertificateRepository certificateRepository;
     private readonly IUserInterface userInterface;
 
+    private CreateRootCertificateResponse response;
+
     public CreateRootCertificateUseCase(ILog log, ICertificateRepository certificateRepository, IUserInterface userInterface)
     {
         this.log = log ?? throw new ArgumentNullException(nameof(log));
@@ -24,13 +27,14 @@ internal class CreateRootCertificateUseCase : IRequestHandler<CreateRootCertific
         this.userInterface = userInterface ?? throw new ArgumentNullException(nameof(userInterface));
     }
 
-    public Task Handle(CreateRootCertificateRequest request, CancellationToken cancellationToken)
+    public Task<CreateRootCertificateResponse> Handle(CreateRootCertificateRequest request, CancellationToken cancellationToken)
     {
+        response = new CreateRootCertificateResponse();
+
         GenericCertificate certificate = GenerateRootCert(request);
-        ShowCertificate(certificate);
         InstallCertificate(certificate);
 
-        return Task.CompletedTask;
+        return Task.FromResult(response);
     }
 
     private GenericCertificate GenerateRootCert(CreateRootCertificateRequest request)
@@ -43,53 +47,63 @@ internal class CreateRootCertificateUseCase : IRequestHandler<CreateRootCertific
             ? request.StoreName
             : DefaultStoreName;
 
-        GenerateRootCertStep generateRootCertStep = new(log)
+        RootCertificateBuilder builder = new()
         {
             SubjectName = $"CN={request.CertificateName},O=Dust in the Wind,OU=Informatics,L=Romania,C=US",
             FriendlyName = request.FriendlyName,
-            KeyLength = 4096,
-            ValidityYears = 100,
+            PublicKeyLength = 4096,
+            PrivateKeyLength = 4096,
+            Validity = TimeSpan.FromDays(36500),
             PrivateKeyPersistence = PersistenceType.MachineLevel,
-            StoreLocation = storeLocation,
-            StoreName = storeName
+            AllowPrivateKeyExport = false,
+            IsPrivateKeyEphemeral = false,
+            StoreName = storeName,
+            StoreLocation = storeLocation
         };
 
-        generateRootCertStep.Execute();
-
-        return generateRootCertStep.GeneratedCertificate;
-    }
-
-    private void ShowCertificate(GenericCertificate certificate)
-    {
-        ShowCertificateOverviewStep showCertificateOverviewStep = new(log, userInterface)
+        response.CertificateGenerationResult = new CertificateGenerationResult
         {
-            Certificate = certificate
+            SubjectName = builder.SubjectName,
+            FriendlyName = builder.FriendlyName,
+            Validity = builder.Validity,
+            PublicKeyLength = builder.PublicKeyLength,
+            PrivateKeyLength = builder.PrivateKeyLength,
+            PrivateKeyPersistence = builder.PrivateKeyPersistence,
+            AllowExport = builder.AllowPrivateKeyExport,
+            StoreLocation = builder.StoreLocation,
+            StoreName = builder.StoreName
         };
 
-        showCertificateOverviewStep.Execute();
-
-        ShowCertificateKeysStep certificateKeysStep = new(log)
+        try
         {
-            Certificate = certificate
-        };
-
-        certificateKeysStep.Execute();
-
-        ShowCertificateExtensionsStep showCertificateExtensionsStep = new(log)
+            GenericCertificate certificate = builder.Build();
+            return certificate;
+        }
+        catch (Exception ex)
         {
-            Certificate = certificate
-        };
-
-        showCertificateExtensionsStep.Execute();
+            response.CertificateGenerationResult.Error = ex;
+            return null;
+        }
     }
 
     private void InstallCertificate(GenericCertificate certificate)
     {
-        InstallCertificateStep installCertificateStep = new(log, certificateRepository)
+        InstallCertificateResult result = new()
         {
-            Certificate = certificate
+            StoreLocation = certificate.StoreLocation,
+            StoreName = certificate.StoreName,
+            CertificateName = certificate.GetName()
         };
 
-        installCertificateStep.Execute();
+        try
+        {
+            certificateRepository.Add(certificate);
+        }
+        catch (Exception ex)
+        {
+            result.Error = ex;
+        }
+
+        response.InstallCertificateResult = result;
     }
 }

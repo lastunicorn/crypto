@@ -1,4 +1,4 @@
-﻿using DustInTheWind.Crypto.Presentation.Controls;
+﻿using DustInTheWind.Crypto.Presentation.CommonControls;
 using DustInTheWind.Crypto.Presentation.Infrastructure;
 
 namespace DustInTheWind.Crypto.Presentation.CertificateArea.FindCertificate;

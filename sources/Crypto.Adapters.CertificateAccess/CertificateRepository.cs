@@ -36,9 +36,9 @@ public class CertificateRepository : ICertificateRepository
         });
     }
 
-    public void Add(GenericCertificate certificate, StoreName storeName, StoreLocation storeLocation)
+    public void Add(GenericCertificate certificate)
     {
-        ExecuteWithStore(storeName, storeLocation, store =>
+        ExecuteWithStore(certificate.StoreName, certificate.StoreLocation, store =>
         {
             store.Open(OpenFlags.MaxAllowed);
             store.Add(certificate.Value);

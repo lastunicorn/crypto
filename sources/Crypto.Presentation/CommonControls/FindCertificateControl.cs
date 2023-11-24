@@ -1,9 +1,8 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using DustInTheWind.ConsoleTools.Controls;
 using DustInTheWind.Crypto.Application.Sections;
 using DustInTheWind.Crypto.Presentation.Infrastructure;
 
-namespace DustInTheWind.Crypto.Presentation.Controls;
+namespace DustInTheWind.Crypto.Presentation.CommonControls;
 
 public class FindCertificateControl : SectionControlBase
 {
@@ -17,7 +16,7 @@ public class FindCertificateControl : SectionControlBase
 
     public FindCertificateControl(FindCertificateResult result)
     {
-        Title = result.Title;
+        Title = "Find Certificate";
         StoreLocation = result.StoreLocation;
         StoreName = result.StoreName;
         CertificateName = result.CertificateName;

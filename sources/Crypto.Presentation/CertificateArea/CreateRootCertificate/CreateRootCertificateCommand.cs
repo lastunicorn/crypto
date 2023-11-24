@@ -3,14 +3,14 @@ using DustInTheWind.ConsoleTools.Commando;
 using DustInTheWind.Crypto.Application.CertificateArea.CreateRootCertificate;
 using MediatR;
 
-namespace DustInTheWind.Crypto.Presentation.CertificateArea;
+namespace DustInTheWind.Crypto.Presentation.CertificateArea.CreateRootCertificate;
 
 /// <summary>
 /// Call Example: crypto create-root -n "Dummy Root CA" -f "Dummy Root Certificate Authority"
 /// Call Example: crypto create-root -n "Dummy Root CA" -f "Dummy Root Certificate Authority" -L LocalMachine -S Root
 /// </summary>
 [NamedCommand("create-root", Description = "Creates a new root certificate and installs it in the store.")]
-internal class CreateRootCertificateCommand : IConsoleCommand
+internal class CreateRootCertificateCommand : IConsoleCommand<CreateRootCertificateViewModel>
 {
     private readonly IMediator mediator;
 
@@ -31,7 +31,7 @@ internal class CreateRootCertificateCommand : IConsoleCommand
         this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public async Task Execute()
+    public async Task<CreateRootCertificateViewModel> Execute()
     {
         CreateRootCertificateRequest request = new()
         {
@@ -41,6 +41,12 @@ internal class CreateRootCertificateCommand : IConsoleCommand
             FriendlyName = FriendlyName
         };
 
-        await mediator.Send(request);
+        CreateRootCertificateResponse response = await mediator.Send(request);
+
+        return new CreateRootCertificateViewModel
+        {
+            CertificateGenerationResult = response.CertificateGenerationResult,
+            InstallCertificateResult = response.InstallCertificateResult
+        };
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using DustInTheWind.Crypto.Application.Results;
 using DustInTheWind.Crypto.Application.Sections;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Domain.PrivateKeyModel;
@@ -31,7 +32,7 @@ internal class CertificateRemoval
 
             if (privateKeyFile?.Exists == true)
             {
-                result.PrivateKeyFileInfo = new PrivateKeyFileInfo
+                result.PrivateKeyFileRemovalInfo = new PrivateKeyFileRemovalInfo
                 {
                     FilePath = privateKeyFile.FullPath,
                     DirectoryPath = privateKeyFile.DirectoryPath,
@@ -68,11 +69,11 @@ internal class CertificateRemoval
     {
         try
         {
-            result.PrivateKeyFileInfo.IsSuccessfullyRemoved = privateKeyFile.Delete();
+            result.PrivateKeyFileRemovalInfo.IsSuccessfullyRemoved = privateKeyFile.Delete();
         }
         catch (Exception ex)
         {
-            result.PrivateKeyFileInfo.RemoveError = ex;
+            result.PrivateKeyFileRemovalInfo.RemoveError = ex;
         }
     }
 }

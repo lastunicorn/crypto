@@ -25,7 +25,7 @@ public class InstallCertificateStep : StepBase
         Log.WriteValue("Store Location", Certificate.StoreLocation);
         Log.WriteValue("Store Name", Certificate.StoreName);
 
-        certificateRepository.Add(Certificate, Certificate.StoreName, Certificate.StoreLocation);
+        certificateRepository.Add(Certificate);
 
         string certificateName = Certificate.GetName();
 

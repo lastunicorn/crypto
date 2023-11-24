@@ -1,4 +1,6 @@
-﻿namespace DustInTheWind.Crypto.Application.Sections;
+﻿using DustInTheWind.Crypto.Application.Results;
+
+namespace DustInTheWind.Crypto.Application.Sections;
 
 public class CertificateRemovalResult
 {
@@ -6,7 +8,7 @@ public class CertificateRemovalResult
 
     public bool CertificateContainsPrivateKey { get; set; }
 
-    public PrivateKeyFileInfo PrivateKeyFileInfo { get; set; }
+    public PrivateKeyFileRemovalInfo PrivateKeyFileRemovalInfo { get; set; }
 
     public Exception Error { get; set; }
 }

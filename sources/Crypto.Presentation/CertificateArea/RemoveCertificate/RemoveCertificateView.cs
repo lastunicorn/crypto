@@ -1,6 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using DustInTheWind.Crypto.Application.Sections;
-using DustInTheWind.Crypto.Presentation.Controls;
 using DustInTheWind.Crypto.Presentation.Infrastructure;
 
 namespace DustInTheWind.Crypto.Presentation.CertificateArea.RemoveCertificate;
@@ -46,13 +45,8 @@ internal class RemoveCertificateView : CustomView<RemoveCertificateViewModel>
             return;
         }
 
-        for (int i = 0; i < removeCertificateResults.Count; i++)
-        {
-            if (i > 0)
-                WriteLine();
-
+        for (int i = 0; i < removeCertificateResults.Count; i++) 
             Display(removeCertificateResults[i], i);
-        }
     }
 
     private static void Display(CertificateRemovalResult certificateRemovalResult, int index)

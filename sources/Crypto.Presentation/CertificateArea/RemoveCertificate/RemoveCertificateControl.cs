@@ -28,12 +28,12 @@ public class RemoveCertificateControl : SectionControlBase
         Title = "Remove Certificate";
         CertificateSubjectName = removalResult.CertificateSubjectName;
         CertificateContainsPk = removalResult.CertificateContainsPrivateKey;
-        PkExists = removalResult.PrivateKeyFileInfo != null;
-        PkFilePath = removalResult.PrivateKeyFileInfo?.FilePath;
-        PkDirectoryPath = removalResult.PrivateKeyFileInfo?.DirectoryPath;
-        PkLocationType = removalResult.PrivateKeyFileInfo?.LocationType.ToString();
-        PkWasRemoved = removalResult.PrivateKeyFileInfo?.IsSuccessfullyRemoved ?? false;
-        PkRemoveError = removalResult.PrivateKeyFileInfo?.RemoveError;
+        PkExists = removalResult.PrivateKeyFileRemovalInfo != null;
+        PkFilePath = removalResult.PrivateKeyFileRemovalInfo?.FilePath;
+        PkDirectoryPath = removalResult.PrivateKeyFileRemovalInfo?.DirectoryPath;
+        PkLocationType = removalResult.PrivateKeyFileRemovalInfo?.LocationType.ToString();
+        PkWasRemoved = removalResult.PrivateKeyFileRemovalInfo?.IsSuccessfullyRemoved ?? false;
+        PkRemoveError = removalResult.PrivateKeyFileRemovalInfo?.RemoveError;
         Error = removalResult.Error;
     }
 

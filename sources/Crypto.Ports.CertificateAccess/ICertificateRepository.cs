@@ -9,7 +9,7 @@ public interface ICertificateRepository
 
     IEnumerable<GenericCertificate> Get(string subjectName, StoreName storeName, StoreLocation storeLocation);
 
-    void Add(GenericCertificate certificate, StoreName storeName, StoreLocation storeLocation);
+    void Add(GenericCertificate certificate);
 
     void Remove(GenericCertificate certificate);
 
