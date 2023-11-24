@@ -4,7 +4,7 @@ using DustInTheWind.Crypto.Ports.UserAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
-public class ShowCertificateOverviewStep : StepBase
+internal class ShowCertificateOverviewStep : StepBase
 {
     private readonly IUserInterface userInterface;
 

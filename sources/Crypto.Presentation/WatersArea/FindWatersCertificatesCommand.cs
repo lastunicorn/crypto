@@ -1,36 +1,23 @@
 ﻿using DustInTheWind.ConsoleTools.Commando;
-using DustInTheWind.Crypto.Application.Steps;
-using DustInTheWind.Crypto.Domain.CertificateModel;
-using DustInTheWind.Crypto.Ports.CertificateAccess;
-using DustInTheWind.Crypto.Ports.LogAccess;
+using DustInTheWind.Crypto.Application.WatersArea.FindWatersCertificates;
+using MediatR;
 
-namespace DustInTheWind.Crypto.Presentation.CommandsOld;
+namespace DustInTheWind.Crypto.Presentation.WatersArea;
 
 [NamedCommand("waters-find", Description = "Search in the store for the \"waters\" certificates.")]
 internal class FindWatersCertificatesCommand : IConsoleCommand
 {
-    private readonly ILog log;
-    private readonly ICertificateRepository certificateRepository;
+    private readonly IMediator mediator;
 
-    public FindWatersCertificatesCommand(ILog log, ICertificateRepository certificateRepository)
+    public FindWatersCertificatesCommand(IMediator mediator)
     {
-        this.log = log ?? throw new ArgumentNullException(nameof(log));
-        this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public Task Execute()
+    public async Task Execute()
     {
-        WatersCertificateIdentifiers certificateIdentifiers = new();
+        FindWatersCertificatesRequest request = new();
 
-        foreach (CertificateIdentifier certificateIdentifier in certificateIdentifiers)
-        {
-            FindCertificateStep findCertificateStep = new(log, certificateRepository)
-            {
-                CertificateIdentifier = certificateIdentifier
-            };
-            findCertificateStep.Execute();
-        }
-
-        return Task.CompletedTask;
+        await mediator.Send(request);
     }
 }

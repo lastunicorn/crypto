@@ -3,7 +3,7 @@ using DustInTheWind.Crypto.Ports.LogAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
-public class GenerateAlezRootCertificateStep : StepBase
+internal class GenerateAlezRootCertificateStep : StepBase
 {
     public override string Title => "Generate Alez Root Certificate";
 

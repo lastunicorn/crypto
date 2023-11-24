@@ -1,65 +1,34 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using DustInTheWind.ConsoleTools.Commando;
-using DustInTheWind.Crypto.Application.AlezArea;
-using DustInTheWind.Crypto.Application.Steps;
+﻿using DustInTheWind.ConsoleTools.Commando;
+using DustInTheWind.Crypto.Application.WatersArea.GrantAccessToWatersCertificates;
 using DustInTheWind.Crypto.Domain.CertificateModel;
-using DustInTheWind.Crypto.Ports.CertificateAccess;
-using DustInTheWind.Crypto.Ports.LogAccess;
+using MediatR;
 
-namespace DustInTheWind.Crypto.Presentation.CommandsOld;
+namespace DustInTheWind.Crypto.Presentation.WatersArea;
 
 [NamedCommand("waters-grant-access", Description = "Give read permissions to everyone for accessing the \"waters\" certificates.")]
 internal class GrantAccessToWatersCertificatesCommand : IConsoleCommand
 {
-    private readonly ILog log;
-    private readonly ICertificateRepository certificateRepository;
+    private readonly IMediator mediator;
 
     [NamedParameter("type", ShortName = 't', IsOptional = true)]
-    public CertificateType CertificateType { get; set; } = CertificateType.All;
+    public CertificateType CertificateType { get; set; }
 
     [NamedParameter("filter", ShortName = 'f', IsOptional = true)]
     public string Filter { get; set; }
 
-    public GrantAccessToWatersCertificatesCommand(ILog log, ICertificateRepository certificateRepository)
+    public GrantAccessToWatersCertificatesCommand(IMediator mediator)
     {
-        this.log = log ?? throw new ArgumentNullException(nameof(log));
-        this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public Task Execute()
+    public async Task Execute()
     {
-        WatersCertificateIdentifiers watersCertificateIdentifiers = new();
-
-        IEnumerable<CertificateIdentifier> certificateIdentifiers = CertificateType switch
+        GrantAccessToWatersCertificatesRequest request = new()
         {
-            CertificateType.Root => watersCertificateIdentifiers.Where(x => x.StoreName == StoreName.Root),
-            CertificateType.Intermediate => watersCertificateIdentifiers.Where(x => x.StoreName == StoreName.CertificateAuthority),
-            CertificateType.Normal => watersCertificateIdentifiers.Where(x => x.StoreName == StoreName.My),
-            _ => watersCertificateIdentifiers
+            CertificateType = CertificateType,
+            Filter = Filter
         };
 
-        if (Filter != null)
-            certificateIdentifiers = certificateIdentifiers.Where(x => x.Name.Contains(Filter));
-
-        foreach (CertificateIdentifier watersCertificateIdentifier in certificateIdentifiers)
-            GrantAccessTo(watersCertificateIdentifier);
-
-        return Task.CompletedTask;
-    }
-
-    private void GrantAccessTo(CertificateIdentifier certificateIdentifier)
-    {
-        FindCertificateStep findCertificateStep = new(log, certificateRepository)
-        {
-            CertificateIdentifier = certificateIdentifier
-        };
-        findCertificateStep.Execute();
-
-        GrantReadAccessToCertificateStep grantReadAccessToCertificateStep = new(log)
-        {
-            Certificate = findCertificateStep.FoundCertificates?.FirstOrDefault()
-        };
-
-        grantReadAccessToCertificateStep.Execute();
+        await mediator.Send(request);
     }
 }

@@ -1,0 +1,5 @@
+﻿namespace DustInTheWind.Crypto.Application.WatersArea.GrantAccessToWatersCertificates;
+
+public class GrantAccessToWatersCertificatesResponse
+{
+}

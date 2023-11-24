@@ -7,7 +7,7 @@ using DustInTheWind.Crypto.Ports.LogAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
-public class GrantReadAccessToCertificateStep : StepBase
+internal class GrantReadAccessToCertificateStep : StepBase
 {
     public override string Title => "Grant Read Access to Certificate";
 

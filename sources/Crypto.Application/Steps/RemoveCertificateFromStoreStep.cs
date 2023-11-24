@@ -6,7 +6,7 @@ using DustInTheWind.Crypto.Ports.LogAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
-public class RemoveCertificateFromStoreStep : StepBase
+internal class RemoveCertificateFromStoreStep : StepBase
 {
     private readonly ICertificateRepository certificateRepository;
 

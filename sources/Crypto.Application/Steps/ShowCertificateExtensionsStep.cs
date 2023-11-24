@@ -5,7 +5,7 @@ using DustInTheWind.Crypto.Ports.LogAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
-public class ShowCertificateExtensionsStep : StepBase
+internal class ShowCertificateExtensionsStep : StepBase
 {
     public override string Title => "Show Certificate Extensions";
 

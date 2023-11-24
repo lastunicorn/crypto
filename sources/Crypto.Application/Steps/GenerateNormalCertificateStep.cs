@@ -6,7 +6,7 @@ using DustInTheWind.Crypto.Ports.LogAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
-public class GenerateNormalCertificateStep : StepBase
+internal class GenerateNormalCertificateStep : StepBase
 {
     public override string Title => "Generate Normal Certificate";
 

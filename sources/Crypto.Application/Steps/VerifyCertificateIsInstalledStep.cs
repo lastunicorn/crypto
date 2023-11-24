@@ -5,7 +5,7 @@ using DustInTheWind.Crypto.Ports.LogAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
-public class VerifyCertificateIsInstalledStep : StepBase
+internal class VerifyCertificateIsInstalledStep : StepBase
 {
     private readonly ICertificateRepository certificateRepository;
 

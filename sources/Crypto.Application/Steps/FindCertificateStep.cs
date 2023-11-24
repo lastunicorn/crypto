@@ -4,7 +4,7 @@ using DustInTheWind.Crypto.Ports.LogAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
-public class FindCertificateStep : StepBase
+internal class FindCertificateStep : StepBase
 {
     private readonly ICertificateRepository certificateRepository;
 

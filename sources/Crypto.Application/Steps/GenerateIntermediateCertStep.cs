@@ -4,7 +4,7 @@ using DustInTheWind.Crypto.Ports.LogAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
-public class GenerateIntermediateCertStep : StepBase
+internal class GenerateIntermediateCertStep : StepBase
 {
     public override string Title => "Generate Intermediate Certificate";
 

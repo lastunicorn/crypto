@@ -4,7 +4,7 @@ using DustInTheWind.Crypto.Ports.LogAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
-public class GenerateRootCertStep : StepBase
+internal class GenerateRootCertStep : StepBase
 {
     public override string Title => "Generate Root Certificate";
 

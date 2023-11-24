@@ -3,7 +3,7 @@ using DustInTheWind.Crypto.Ports.LogAccess;
 
 namespace DustInTheWind.Crypto.Application.Steps;
 
-public class VerifyCertificateParentStep : StepBase
+internal class VerifyCertificateParentStep : StepBase
 {
     public override string Title => "Verify Certificate Parent";
 

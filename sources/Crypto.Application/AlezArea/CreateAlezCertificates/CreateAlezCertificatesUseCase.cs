@@ -1,4 +1,5 @@
-﻿using DustInTheWind.Crypto.Application.Steps;
+﻿using System.Security.Cryptography.X509Certificates;
+using DustInTheWind.Crypto.Application.Steps;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 using DustInTheWind.Crypto.Ports.LogAccess;
