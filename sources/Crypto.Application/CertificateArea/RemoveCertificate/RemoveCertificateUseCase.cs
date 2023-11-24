@@ -57,14 +57,11 @@ internal class RemoveCertificateUseCase : IRequestHandler<RemoveCertificateReque
 
         List<GenericCertificate> foundCertificates = certificateRepository.Get(certificateIdentifier)
             .ToList();
-
-        response.FindCertificateResult = new FindCertificateResult
-        {
-            StoreLocation = storeLocation,
-            StoreName = storeName,
-            CertificateName = request.Name,
-            CertificateCount = (int)foundCertificates?.Count
-        };
+        
+        response.StoreLocation = storeLocation;
+        response.StoreName = storeName;
+        response.CertificateName = request.Name;
+        response.CertificateCount = (int)foundCertificates?.Count;
 
         return foundCertificates;
     }
@@ -72,8 +69,8 @@ internal class RemoveCertificateUseCase : IRequestHandler<RemoveCertificateReque
     private void RemoveCertificate(GenericCertificate certificate)
     {
         CertificateRemoval certificateRemoval = new(certificate, certificateRepository);
-        RemoveCertificateResult result = certificateRemoval.Execute();
+        CertificateRemovalResult result = certificateRemoval.Execute();
 
-        response.RemoveCertificateResults.Add(result);
+        response.CertificateRemovalResults.Add(result);
     }
 }

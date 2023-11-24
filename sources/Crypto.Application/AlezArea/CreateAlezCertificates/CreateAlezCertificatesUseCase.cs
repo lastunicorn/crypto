@@ -67,11 +67,9 @@ internal class CreateAlezCertificatesUseCase : IRequestHandler<CreateAlezCertifi
 
     private void FindRootCertificate()
     {
-        AlezCertificateIdentifiers alezCertificateIdentifiers = new();
-
         FindCertificateStep findCertificateStep = new(log, certificateRepository)
         {
-            CertificateIdentifier = alezCertificateIdentifiers.Root
+            CertificateIdentifier = AlezCertificateIdentifiers.Root
         };
         findCertificateStep.Execute();
         rootCertificate = findCertificateStep.FoundCertificates.FirstOrDefault();
@@ -109,11 +107,9 @@ internal class CreateAlezCertificatesUseCase : IRequestHandler<CreateAlezCertifi
 
     private void FindIntermediateCertificate()
     {
-        AlezCertificateIdentifiers alezCertificateIdentifiers = new();
-
         FindCertificateStep findCertificateStep = new(log, certificateRepository)
         {
-            CertificateIdentifier = alezCertificateIdentifiers.Intermediate
+            CertificateIdentifier = AlezCertificateIdentifiers.Intermediate
         };
         findCertificateStep.Execute();
         intermediateCertificate = findCertificateStep.FoundCertificates.FirstOrDefault();

@@ -1,0 +1,50 @@
+﻿using System.Security.Cryptography.X509Certificates;
+using DustInTheWind.ConsoleTools.Commando;
+using DustInTheWind.Crypto.Application.CertificateArea.RemoveCertificate;
+using MediatR;
+
+namespace DustInTheWind.Crypto.Presentation.CertificateArea.RemoveCertificate;
+
+/// <summary>
+/// Call Example: crypto remove -n "Dummy Root CA" -L LocalMachine -S Root
+/// </summary>
+[NamedCommand("remove", Description = "Removes the specified certificate from the store.")]
+internal class RemoveCertificateCommand : IConsoleCommand<RemoveCertificateViewModel>
+{
+    private readonly IMediator mediator;
+
+    [NamedParameter("store-location", ShortName = 'L', IsOptional = true)]
+    public StoreLocation StoreLocation { get; set; } = StoreLocation.CurrentUser;
+
+    [NamedParameter("store-name", ShortName = 'S', IsOptional = true)]
+    public StoreName StoreName { get; set; } = StoreName.My;
+
+    [NamedParameter("name", ShortName = 'n')]
+    public string Name { get; set; }
+
+    public RemoveCertificateCommand(IMediator mediator)
+    {
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+    }
+
+    public async Task<RemoveCertificateViewModel> Execute()
+    {
+        RemoveCertificateRequest request = new()
+        {
+            StoreLocation = StoreLocation,
+            StoreName = StoreName,
+            Name = Name
+        };
+
+        RemoveCertificateResponse response = await mediator.Send(request);
+
+        return new RemoveCertificateViewModel
+        {
+            StoreLocation = response.StoreLocation,
+            StoreName = response.StoreName,
+            CertificateName = response.CertificateName,
+            CertificateCount = response.CertificateCount,
+            CertificateRemovalResults = response.CertificateRemovalResults
+        };
+    }
+}

@@ -2,7 +2,7 @@
 
 namespace DustInTheWind.Crypto.Application.EncryptionArea.SymmetricEncryption;
 
-public class SymmetricEncryptionRequest : IRequest
+public class SymmetricEncryptionRequest : IRequest<SymmetricEncryptionResponse>
 {
     public string Text { get; set; }
 }

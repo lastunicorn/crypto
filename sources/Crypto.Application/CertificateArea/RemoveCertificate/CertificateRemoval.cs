@@ -10,7 +10,7 @@ internal class CertificateRemoval
 {
     private readonly ICertificateRepository certificateRepository;
     private readonly GenericCertificate certificate;
-    private RemoveCertificateResult result;
+    private CertificateRemovalResult result;
 
     public CertificateRemoval(GenericCertificate certificate, ICertificateRepository certificateRepository)
     {
@@ -18,9 +18,9 @@ internal class CertificateRemoval
         this.certificateRepository = certificateRepository ?? throw new ArgumentNullException(nameof(certificateRepository));
     }
 
-    public RemoveCertificateResult Execute()
+    public CertificateRemovalResult Execute()
     {
-        result = new RemoveCertificateResult
+        result = new CertificateRemovalResult
         {
             CertificateSubjectName = certificate.SubjectName
         };

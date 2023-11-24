@@ -1,6 +1,6 @@
 ﻿using DustInTheWind.ConsoleTools.Commando;
 using DustInTheWind.ConsoleTools.Commando.Setup.Autofac;
-using DustInTheWind.Crypto.Presentation.Commands.EncryptionArea.Hash;
+using DustInTheWind.Crypto.Presentation.EncryptionArea.Hash;
 
 namespace DustInTheWind.Crypto;
 

@@ -100,6 +100,6 @@ internal class ExportAsPemUseCase : IRequestHandler<ExportAsPemRequest, ExportAs
             result.Error = ex;
         }
 
-        response.SaveCertificateAsPemSections.Add(result);
+        response.ExportAsPemResults.Add(result);
     }
 }

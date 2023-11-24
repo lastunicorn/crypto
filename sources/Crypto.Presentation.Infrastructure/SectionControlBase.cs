@@ -22,8 +22,6 @@ public abstract class SectionControlBase : ControlBase
         {
             WriteError(ex);
         }
-
-        WriteLine();
     }
 
     protected abstract void DoDisplay();

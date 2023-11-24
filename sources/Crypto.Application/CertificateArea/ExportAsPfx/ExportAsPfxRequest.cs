@@ -3,11 +3,13 @@ using MediatR;
 
 namespace DustInTheWind.Crypto.Application.CertificateArea.ExportAsPfx;
 
-public class ExportAsPfxRequest : IRequest
+public class ExportAsPfxRequest : IRequest<ExportAsPfxResponse>
 {
     public StoreLocation StoreLocation { get; set; }
 
     public StoreName StoreName { get; set; }
 
     public string SubjectName { get; set; }
+    
+    public string Password { get; set; }
 }

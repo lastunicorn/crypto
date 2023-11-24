@@ -18,6 +18,7 @@
         <ProjectReference Include="..\Crypto.Adapters.CertificateAccess\Crypto.Adapters.CertificateAccess.csproj" PrivateAssets="All" />
         <ProjectReference Include="..\Crypto.Adapters.FileAccess\Crypto.Adapters.FileAccess.csproj" PrivateAssets="All" />
         <ProjectReference Include="..\Crypto.Adapters.LogAccess\Crypto.Adapters.LogAccess.csproj" PrivateAssets="All" />
+        <ProjectReference Include="..\Crypto.Adapters.UserAccess\Crypto.Adapters.UserAccess.csproj" PrivateAssets="All" />
         <ProjectReference Include="..\Crypto.Domain\Crypto.Domain.csproj" PrivateAssets="All" />
         <ProjectReference Include="..\Crypto.Ports.CertificateAccess\Crypto.Ports.CertificateAccess.csproj" PrivateAssets="All" />
         <ProjectReference Include="..\Crypto.Ports.FileAccess\Crypto.Ports.FileAccess.csproj" PrivateAssets="All" />

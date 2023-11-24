@@ -45,11 +45,9 @@ internal class ExportAlezAsPfxUseCase : IRequestHandler<ExportAlezAsPfxRequest>
 
     private GenericCertificate RetrieveRootCertificate()
     {
-        AlezCertificateIdentifiers alezCertificateIdentifiers = new();
-
         FindCertificateStep findCertificateStep = new(log, certificateRepository)
         {
-            CertificateIdentifier = alezCertificateIdentifiers.Root
+            CertificateIdentifier = AlezCertificateIdentifiers.Root
         };
         findCertificateStep.Execute();
         return findCertificateStep.FoundCertificates.FirstOrDefault();
@@ -57,11 +55,9 @@ internal class ExportAlezAsPfxUseCase : IRequestHandler<ExportAlezAsPfxRequest>
 
     private GenericCertificate RetrieveIntermediateCertificate()
     {
-        AlezCertificateIdentifiers alezCertificateIdentifiers = new();
-
         FindCertificateStep findCertificateStep = new(log, certificateRepository)
         {
-            CertificateIdentifier = alezCertificateIdentifiers.Intermediate
+            CertificateIdentifier = AlezCertificateIdentifiers.Intermediate
         };
         findCertificateStep.Execute();
         return findCertificateStep.FoundCertificates.FirstOrDefault();
@@ -69,11 +65,9 @@ internal class ExportAlezAsPfxUseCase : IRequestHandler<ExportAlezAsPfxRequest>
 
     private GenericCertificate RetrieveNormalCertificate()
     {
-        AlezCertificateIdentifiers alezCertificateIdentifiers = new();
-
         FindCertificateStep findCertificateStep = new(log, certificateRepository)
         {
-            CertificateIdentifier = alezCertificateIdentifiers.Normal
+            CertificateIdentifier = AlezCertificateIdentifiers.Normal
         };
         findCertificateStep.Execute();
         return findCertificateStep.FoundCertificates.FirstOrDefault();

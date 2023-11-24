@@ -3,7 +3,7 @@ using DustInTheWind.Crypto.Ports.UserAccess;
 
 namespace DustInTheWind.Crypto.Adapters.UserAccess;
 
-internal class UserInterface : IUserInterface
+public class UserInterface : IUserInterface
 {
     public void DisplayOverview(GenericCertificate certificate)
     {

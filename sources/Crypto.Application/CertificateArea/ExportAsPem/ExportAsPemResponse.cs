@@ -6,5 +6,5 @@ public class ExportAsPemResponse
 {
     public FindCertificateResult FindCertificateResult { get; set; }
 
-    public List<ExportAsPemResult> SaveCertificateAsPemSections { get; } = new();
+    public List<ExportAsPemResult> ExportAsPemResults { get; } = new();
 }

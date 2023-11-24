@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using DustInTheWind.Crypto.Domain.CertificateModel;
+using MediatR;
 
 namespace DustInTheWind.Crypto.Application.AlezArea.CreateAlezCertificates;
 
