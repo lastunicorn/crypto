@@ -1,5 +1,4 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using DustInTheWind.Crypto.Application.Sections;
 
 namespace DustInTheWind.Crypto.Application.Results;
 

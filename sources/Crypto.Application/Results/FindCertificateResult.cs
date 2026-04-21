@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 
-namespace DustInTheWind.Crypto.Application.Sections;
+namespace DustInTheWind.Crypto.Application.Results;
 
 public class FindCertificateResult
 {

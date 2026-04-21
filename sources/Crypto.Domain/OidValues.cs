@@ -1,6 +1,6 @@
 ﻿namespace DustInTheWind.Crypto.Domain;
 
-public class OidValues
+public static class OidValues
 {
     public const string ServerAuthentication = "1.3.6.1.5.5.7.3.1";
     public const string ClientAuthentication = "1.3.6.1.5.5.7.3.2";

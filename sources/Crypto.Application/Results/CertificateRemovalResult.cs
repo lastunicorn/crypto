@@ -1,6 +1,4 @@
-﻿using DustInTheWind.Crypto.Application.Results;
-
-namespace DustInTheWind.Crypto.Application.Sections;
+﻿namespace DustInTheWind.Crypto.Application.Results;
 
 public class CertificateRemovalResult
 {

@@ -1,5 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using DustInTheWind.Crypto.Application.Sections;
+using DustInTheWind.Crypto.Application.Results;
 using MediatR;
 
 namespace DustInTheWind.Crypto.Application.CertificateArea.FindCertificate;

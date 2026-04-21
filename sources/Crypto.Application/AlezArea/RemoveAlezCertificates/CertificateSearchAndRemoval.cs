@@ -1,6 +1,5 @@
 ﻿using DustInTheWind.Crypto.Application.CertificateArea.RemoveCertificate;
 using DustInTheWind.Crypto.Application.Results;
-using DustInTheWind.Crypto.Application.Sections;
 using DustInTheWind.Crypto.Domain.CertificateModel;
 using DustInTheWind.Crypto.Ports.CertificateAccess;
 

@@ -1,4 +1,4 @@
-﻿using DustInTheWind.Crypto.Application.Sections;
+﻿using DustInTheWind.Crypto.Application.Results;
 
 namespace DustInTheWind.Crypto.Presentation.CertificateArea.FindCertificate;
 

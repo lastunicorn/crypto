@@ -1,7 +1,6 @@
-﻿using System.IO;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
-namespace DustInTheWind.Crypto.Application.EncryptionArea.SymmetricEncryption;
+namespace DustInTheWind.Crypto.Domain.SymetricEncryption;
 
 public class AesEncryptedText
 {

@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using DustInTheWind.Crypto.Domain.SymetricEncryption;
 using DustInTheWind.Crypto.Ports.LogAccess;
 using MediatR;
 

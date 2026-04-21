@@ -1,4 +1,4 @@
-﻿namespace DustInTheWind.Crypto.Application.Sections;
+﻿namespace DustInTheWind.Crypto.Application.Results;
 
 public abstract class ResultBase
 {
